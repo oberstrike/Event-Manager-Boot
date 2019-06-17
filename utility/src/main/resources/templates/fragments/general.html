@@ -93,7 +93,7 @@
 					<div class="col" th:text="${member.username}"></div>
 					<div class="col" th:text="${member.email}"></div>
 					<div class="col">
-						<p class="text text-danger" th:onclick="'openMemberModal(\'' + ${member.id} + '\')' ">Edit</p>
+						<p class="btn btn-primary" th:onclick="'openMemberModal(\'' + ${member.id} + '\')' ">Edit</p>
 					</div>
 					<div id="memberModalHolder"></div>
 				</div>
@@ -107,7 +107,7 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle" th:text=${member.username}>Modal title</h5>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
