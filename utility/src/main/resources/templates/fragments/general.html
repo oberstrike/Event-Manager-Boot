@@ -14,6 +14,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="/css/costum-style.css" rel="stylesheet">
 <title th:text="${title}">Member</title>
 </head>
 <!--  th:text="${#dates.format(game.startDate, 'dd.MM.yyyy HH:mm') }" -->
@@ -41,7 +42,7 @@
 						data-toggle="dropdown"> Adminstration </a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="/members">Members</a> <a
-								class="dropdown-item" href="#">Settings</a>
+								class="dropdown-item" href="/settings">Settings</a>
 						</div></li>
 				</ul>
 
@@ -69,7 +70,6 @@
 	<script src="/js/scripts.js"></script>
 
 	<script type="text/javascript">
-
 		function openMemberModal(id) {
 			console.log("memberModal");
 			$.get("/member/" + id).done(function(data) {
@@ -93,7 +93,8 @@
 					<div class="col" th:text="${member.username}"></div>
 					<div class="col" th:text="${member.email}"></div>
 					<div class="col">
-						<p class="btn btn-primary" th:onclick="'openMemberModal(\'' + ${member.id} + '\')' ">Edit</p>
+						<p class="btn btn-primary"
+							th:onclick="'openMemberModal(\'' + ${member.id} + '\')' ">Edit</p>
 					</div>
 					<div id="memberModalHolder"></div>
 				</div>
@@ -107,7 +108,8 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle" th:text=${member.username}>Modal title</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle"
+					th:text=${member.username}>Modal title</h5>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
