@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.agil.model.Member;
-import com.agil.repos.UserRepository;
+import com.agil.repos.MemberRepository;
 import com.agil.utility.UserRole;
 
 @SpringBootApplication
@@ -31,11 +31,16 @@ public class UtilityApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	CommandLineRunner init(UserRepository userRepository) {
+	CommandLineRunner init(MemberRepository userRepository) {
 		return (args) -> {
-			Member user = new Member(new HashSet<>(Arrays.asList(UserRole.ROLE_USER, UserRole.ROLE_ADMIN)), "oberstrike", encoder.encode("mewtu123"), "markus.juergens@gmx.de");
-			userRepository.save(user);		
-			user = new Member(new HashSet<>(Arrays.asList(UserRole.ROLE_USER)), "markus", encoder.encode("mewtu123"), "oberstrike@gmx.de");
+			Member user = new Member(new HashSet<>(Arrays.asList(UserRole.ROLE_USER, UserRole.ROLE_ADMIN)),
+					"oberstrike", encoder.encode("mewtu123"), "markus.juergens@gmx.de");
+			user.setEnabled(true);
+			userRepository.save(user);
+
+			user = new Member(new HashSet<>(Arrays.asList(UserRole.ROLE_USER)), "markus", encoder.encode("mewtu123"),
+					"oberstrike@gmx.de");
+			user.setEnabled(true);
 			userRepository.save(user);
 		};
 

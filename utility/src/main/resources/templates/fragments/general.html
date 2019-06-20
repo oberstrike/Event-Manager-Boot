@@ -119,8 +119,18 @@
 			</div>
 			<form action="#">
 				<div class="modal-body">
-				
-				
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								<label class="switch"> <input type="checkbox"
+									name="enabled" id="enabled"
+									th:checked="${member.enabled}"> <span
+									class="slider round"> </span>
+								</label> <label for="enabled">Enabled</label>
+							</div>
+						</div>
+
+					</div>
 				</div>
 				<div class="modal-footer">
 					<input type="submit" value="Save Changes"

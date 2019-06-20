@@ -13,14 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.agil.model.Member;
-import com.agil.repos.UserRepository;
+import com.agil.repos.MemberRepository;
 
 @Service
 public class MemberServiceImpl implements MemberService {
 	@Autowired
 	public BCryptPasswordEncoder encoder;
 	@Autowired
-	private UserRepository userRepo;
+	private MemberRepository userRepo;
 
 	@Override
 	public Optional<Member> findById(long id) {

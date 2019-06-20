@@ -43,7 +43,8 @@ public class Member {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-
+	@Column(name="enabled")
+	private boolean enabled;
 
 	@ElementCollection(targetClass = UserRole.class)
 	@JoinTable(name = "memberRoles", joinColumns = @JoinColumn(name = "id"))
@@ -125,5 +126,15 @@ public class Member {
 	public void setAgb(boolean agb) {
 		this.agb = agb;
 	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+
 
 }

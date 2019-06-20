@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.agil.model.Member;
 
 @Repository
-public interface UserRepository extends CrudRepository<Member, Long> {
+public interface MemberRepository extends CrudRepository<Member, Long> {
 
 	Optional<Member> findByUsername(String username);
 

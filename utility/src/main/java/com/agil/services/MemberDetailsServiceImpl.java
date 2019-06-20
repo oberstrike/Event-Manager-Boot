@@ -6,37 +6,40 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.agil.model.Member;
 import com.agil.model.MyUser;
-import com.agil.repos.UserRepository;
+import com.agil.repos.MemberRepository;
 import com.agil.utility.UserRole;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class MemberDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserRepository userRepo;
+	private MemberRepository memberRepository;
 
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		com.agil.model.Member user = userRepo.findByUsername(username).orElse(null);
+		Member member = memberRepository.findByUsername(username).orElse(null);
 
-		if (user == null)
+		if (member == null)
 			throw new UsernameNotFoundException(username);
-
+		if( !member.isEnabled())
+			throw new UsernameNotFoundException(username);
+		
+		
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		for (UserRole role : user.getRoles()) {
+		for (UserRole role : member.getRoles()) {
 			grantedAuthorities.add(new SimpleGrantedAuthority(role.toString()));
 		}
 
-		return new MyUser(user, true, true, true, true, grantedAuthorities);
+		return new MyUser(member, true, true, true, true, grantedAuthorities);
 
 	}
 
