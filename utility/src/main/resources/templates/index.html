@@ -1,12 +1,39 @@
 <!DOCTYPE html>
 <html>
-<div
-	th:replace="fragments/general.html :: headerdata (title='Index')"></div>
+<div th:replace="fragments/general.html :: headerdata (title='Index')"></div>
 <body>
-		<div th:replace="fragments/general.html :: header"></div>
-		<th:form>
-		
-		</th:form>
-		<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
+	<div th:replace="fragments/general.html :: header"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="card" style="display: none">
+					<div class="card-body">
+						<h5 class="card-title">Special title treatment</h5>
+						<p class="card-text">With supporting text below as a natural
+							lead-in to additional content.</p>
+						<a href="#" class="btn btn-primary">Go somewhere</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="card" style="display: none">
+					<div class="card-body">
+						<h5 class="card-title">Special title treatment</h5>
+						<p class="card-text">With supporting text below as a natural
+							lead-in to additional content.</p>
+						<a href="#" class="btn btn-primary">Go somewhere</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".card").each(function(i) {
+				$(this).delay(275 * i).slideDown(500);
+			});
+		});
+	</script>
 </body>
 </html>
