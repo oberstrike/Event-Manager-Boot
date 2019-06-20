@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<div
+	th:replace="fragments/general.html :: headerdata (title='TEMPLATE-NEEDS-CHANGE')"></div>
+<body>
+	<div th:replace="fragments/general.html :: header"></div>
+
+	<div class="container">
+		<div class="row">
+			<form action="/settings/update" method="post">
+				<div class="col">
+					<label class="switch"> <input type="checkbox"
+						name="registration" id="registration" th:checked="${registration}">
+						<span class="slider round"> </span>
+					</label> <label for="registration">Allow registration</label>
+				</div>
+				<div class="col-3">
+					<input class="btn btn-primary" type="submit" value="Submit">
+				</div>
+			</form>
+
+		</div>
+	</div>
+	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
+</body>
+</html>
