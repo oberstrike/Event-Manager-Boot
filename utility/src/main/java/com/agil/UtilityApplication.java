@@ -35,7 +35,8 @@ public class UtilityApplication extends SpringBootServletInitializer {
 		return (args) -> {
 			Member user = new Member(new HashSet<>(Arrays.asList(UserRole.ROLE_USER, UserRole.ROLE_ADMIN)), "oberstrike", encoder.encode("mewtu123"), "markus.juergens@gmx.de");
 			userRepository.save(user);		
-			
+			user = new Member(new HashSet<>(Arrays.asList(UserRole.ROLE_USER)), "markus", encoder.encode("mewtu123"), "oberstrike@gmx.de");
+			userRepository.save(user);
 		};
 
 	}
