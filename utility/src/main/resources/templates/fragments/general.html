@@ -14,8 +14,8 @@
 	crossorigin="anonymous">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="/css/costum-style.css" rel="stylesheet">
 <title th:text="${title}">Member</title>
+<link href="/css/costum-style.css" rel="stylesheet">
 </head>
 <!--  th:text="${#dates.format(game.startDate, 'dd.MM.yyyy HH:mm') }" -->
 
@@ -83,19 +83,21 @@
 <div th:fragment="showMembers">
 	<div class="container">
 		<div class="row" th:if="${members}">
-			<div class="col bg-dark text-white">Name</div>
-			<div class="col bg-dark text-white">Email</div>
-			<div class="col bg-dark text-white">Delete</div>
+			<div class="col bg-dark text-white">
+				<h3>Name</h3>
+			</div>
+			<div class="col bg-dark text-white">
+				<h3>Email</h3>
+			</div>
 		</div>
 		<th:block th:if="${members}">
 			<th:block th:each="member: ${members}">
 				<div class="row">
-					<div class="col" th:text="${member.username}"></div>
-					<div class="col" th:text="${member.email}"></div>
 					<div class="col">
-						<p class="btn btn-primary"
-							th:onclick="'openMemberModal(\'' + ${member.id} + '\')' ">Edit</p>
+						<p th:onclick="'openMemberModal(\'' + ${member.id} + '\')' "
+							th:text="${member.username}">Username</p>
 					</div>
+					<div class="col" th:text="${member.email}"></div>
 					<div id="memberModalHolder"></div>
 				</div>
 			</th:block>
@@ -109,17 +111,24 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLongTitle"
-					th:text=${member.username}>Modal title</h5>
+					th:text=${member.username}>Username</h5>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">...</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
-			</div>
+			<form action="#">
+				<div class="modal-body">
+				
+				
+				</div>
+				<div class="modal-footer">
+					<input type="submit" value="Save Changes"
+						class="btn btn-round-sm float-left btn-danger">
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
