@@ -19,7 +19,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.agil.utility.UserRole;
+import com.agil.utility.MemberRole;
+import com.agil.utility.MemberRole;
 
 @Entity
 public class Member {
@@ -28,7 +29,7 @@ public class Member {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Member(Set<UserRole> roles,
+	public Member(Set<MemberRole> roles,
 			@NotEmpty(message = "{username.notempty}") @Size(min = 6, max = 32, message = "{username.badformat}") String username,
 			@NotEmpty(message = "{password.notempty}") String password,
 			@Email @NotEmpty(message = "{email.notempty}") String email) {
@@ -39,6 +40,7 @@ public class Member {
 		this.email = email;
 	}
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -46,11 +48,11 @@ public class Member {
 	@Column(name="enabled")
 	private boolean enabled;
 
-	@ElementCollection(targetClass = UserRole.class)
+	@ElementCollection(targetClass = MemberRole.class)
 	@JoinTable(name = "memberRoles", joinColumns = @JoinColumn(name = "id"))
 	@Column(name = "role", nullable = true)
 	@Enumerated(EnumType.STRING)
-	private Set<UserRole> roles = new HashSet<>(Arrays.asList(UserRole.ROLE_USER));
+	private Set<MemberRole> roles = new HashSet<>(Arrays.asList(MemberRole.ROLE_USER));
 
 	@NotEmpty(message = "{username.notempty}")
 	@Size(min = 6, max = 32, message = "{username.badformat}")
@@ -79,11 +81,11 @@ public class Member {
 	}
 
 
-	public Set<UserRole> getRoles() {
+	public Set<MemberRole> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<UserRole> roles) {
+	public void setRoles(Set<MemberRole> roles) {
 		this.roles = roles;
 	}
 
@@ -136,5 +138,7 @@ public class Member {
 	}
 	
 
-
+	public boolean isAdmin() {
+		return this.roles == null ? false : roles.contains(MemberRole.ROLE_ADMIN);
+	}
 }

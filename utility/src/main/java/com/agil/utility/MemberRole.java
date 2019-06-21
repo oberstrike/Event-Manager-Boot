@@ -1,12 +1,12 @@
 package com.agil.utility;
 
-public enum UserRole {
+public enum MemberRole {
 	ROLE_ADMIN("Administrator"), 
 	ROLE_USER("Benutzer");
 	
 	private String description;
 	
-	private UserRole(String description) {
+	private MemberRole(String description) {
 		this.description = description;
 	}
 	

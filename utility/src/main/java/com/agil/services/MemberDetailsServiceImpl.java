@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.agil.model.Member;
 import com.agil.model.MyUser;
 import com.agil.repos.MemberRepository;
-import com.agil.utility.UserRole;
+import com.agil.utility.MemberRole;
 
 @Service
 public class MemberDetailsServiceImpl implements UserDetailsService {
@@ -35,7 +35,7 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
 		
 		
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		for (UserRole role : member.getRoles()) {
+		for (MemberRole role : member.getRoles()) {
 			grantedAuthorities.add(new SimpleGrantedAuthority(role.toString()));
 		}
 

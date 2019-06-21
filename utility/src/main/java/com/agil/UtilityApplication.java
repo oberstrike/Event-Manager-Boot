@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.agil.model.Member;
 import com.agil.repos.MemberRepository;
-import com.agil.utility.UserRole;
+import com.agil.utility.MemberRole;
 
 @SpringBootApplication
 public class UtilityApplication extends SpringBootServletInitializer {
@@ -33,12 +33,12 @@ public class UtilityApplication extends SpringBootServletInitializer {
 	@Bean
 	CommandLineRunner init(MemberRepository userRepository) {
 		return (args) -> {
-			Member user = new Member(new HashSet<>(Arrays.asList(UserRole.ROLE_USER, UserRole.ROLE_ADMIN)),
+			Member user = new Member(new HashSet<>(Arrays.asList(MemberRole.ROLE_USER, MemberRole.ROLE_ADMIN)),
 					"oberstrike", encoder.encode("mewtu123"), "markus.juergens@gmx.de");
 			user.setEnabled(true);
 			userRepository.save(user);
 
-			user = new Member(new HashSet<>(Arrays.asList(UserRole.ROLE_USER)), "markus", encoder.encode("mewtu123"),
+			user = new Member(new HashSet<>(Arrays.asList(MemberRole.ROLE_USER)), "markus", encoder.encode("mewtu123"),
 					"oberstrike@gmx.de");
 			user.setEnabled(true);
 			userRepository.save(user);

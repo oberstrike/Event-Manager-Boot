@@ -2,15 +2,15 @@ package com.agil.model;
 
 import java.util.Set;
 
-import com.agil.utility.UserRole;;
+import com.agil.utility.MemberRole;;
 
 public class SimpleUser {
 
 	String email;
 	String username;
-	Set<UserRole> roles;
+	Set<MemberRole> roles;
 	
-	public SimpleUser(String email, String username, Set<UserRole> roles) {
+	public SimpleUser(String email, String username, Set<MemberRole> roles) {
 		super();
 		this.email = email;
 		this.username = username;
@@ -29,16 +29,16 @@ public class SimpleUser {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public Set<UserRole> getRoles() {
+	public Set<MemberRole> getRoles() {
 		return roles;
 	}
-	public void setRoles(Set<UserRole> roles) {
+	public void setRoles(Set<MemberRole> roles) {
 		this.roles = roles;
 	}
 	
 	public String getRolesReadable() {
 		String output = "";
-		for(UserRole ur : getRoles()) {
+		for(MemberRole ur : getRoles()) {
 			output += ur.getDescription() + ", ";
 		}
 		output = output.substring(0, output.length()-2);
