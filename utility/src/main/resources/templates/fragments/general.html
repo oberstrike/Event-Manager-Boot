@@ -17,11 +17,12 @@
 <title th:text="${title}">Member</title>
 <link href="/css/costum-style.css" rel="stylesheet">
 </head>
-<!--  th:text="${#dates.format(game.startDate, 'dd.MM.yyyy HH:mm') }" -->
 
-<div th:fragment="header">
-	<div class="row-12" style="margin-bottom: 12px">
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!--  th:text="${#dates.format(game.startDate, 'dd.MM.yyyy HH:mm') }" -->
+<body>
+	<div th:fragment="header">
+		<nav
+			class="navbar navbar-costum navbar-expand-md navbar-dark fixed-top bg-dark">
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarText" aria-controls="navbarText"
 				aria-expanded="false" aria-label="Toggle navigation">
@@ -44,44 +45,53 @@
 							<a class="dropdown-item" href="/members">Members</a> <a
 								class="dropdown-item" href="/settings">Settings</a>
 						</div></li>
+					<li class="nav-item active d-block d-sm-none"><p
+							class="nav-link" th:onclick="'openSearchModal()' ">Search</p></li>
+
+					<li class="btn d-none d-sm-block">
+						<form class="form-inline mr-auto">
+							<input class="form-control" type="text" placeholder="Search"
+								aria-label="Search">
+							<button class="btn btn-costum-dark text-white" type="submit">Search</button>
+						</form>
+					</li>
 				</ul>
-
-
-				<th:block sec:authorize="isAuthenticated()">
-					<ul class="navbar-nav">
-						<li class="nav-item active"><a class="nav-link active"
-							th:href="@{/logout}">Ausloggen</a></li>
-					</ul>
-				</th:block>
-
 			</div>
 
 
-
+			<th:block sec:authorize="isAuthenticated()">
+				<ul class="navbar-nav">
+					<li class="nav-item active"><a class="nav-link active"
+						th:href="@{/logout}">Ausloggen</a></li>
+				</ul>
+			</th:block>
 		</nav>
 	</div>
-</div>
 
 
-<div th:fragment="bootstrapcomponents">
-	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-	<script th:src="@{/webjars/popper.js/1.14.7/popper.min.js}"></script>
-	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-	<script src="/js/scripts.js"></script>
+	<div th:fragment="bootstrapcomponents">
+		<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+		<script th:src="@{/webjars/popper.js/1.14.7/popper.min.js}"></script>
+		<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+		<script src="/js/scripts.js"></script>
 
-	<script type="text/javascript">
-		function openMemberModal(id) {
-			console.log("memberModal");
-			$.get("/member/" + id).done(function(data) {
-				$("#memberModalHolder").html(data);
-				$("#memberModal").modal("show");
-			})
-		}
-	</script>
-</div>
+		<script type="text/javascript">
+			
+		</script>
+	</div>
 
-<div th:fragment="showMembers">
-	<div class="container">
+
+	<div class="col-sm-3" th:fragment="event">
+		<div class="card" style="display: none">
+			<div class="card-body">
+				<h5 class="card-title" th:text="${event.name}"></h5>
+				<p class="card-text" th:text="${#dates.format(event.startDate, 'dd.MM.yyyy HH:mm') }"></p>
+				<a href="#" class="btn btn-primary">Go somewhere</a>
+			</div>
+		</div>
+	</div>
+
+	<div th:fragment="showMembers">
 		<div class="row" th:if="${members}">
 			<div class="col bg-dark text-white">
 				<h3>Name</h3>
@@ -103,54 +113,76 @@
 			</th:block>
 		</th:block>
 	</div>
-</div>
 
-<div class="modal fade" id="memberModal" role="dialog"
-	aria-labelledby="Member Modal" th:fragment="modalContents">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle"
-					th:text=${member.username}>Username</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<form action="/member/update" method="POST">
-				<input type="hidden" name="id" th:value="${member.id}">
-				<div class="modal-body"> 
-					<div class="container">
-						<div class="row" th:if="${!member.isAdmin()}">
-							<div class="col">
-								<label class="switch"> <input type="checkbox"
-									name="enabled" id="enabled" th:checked="${member.enabled}">
-									<span class="slider round"> </span>
-								</label> <label for="enabled">Enabled</label>
+	<div class="modal fade" id="memberModal" role="dialog"
+		aria-labelledby="Member Modal" th:fragment=memberModalContent>
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle"
+						th:text=${member.username}>Username</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="#">
+					<div class="modal-body">
+						<div class="container">
+							<div class="row" th:if="${!member.isAdmin()}">
+								<div class="col">
+									<label class="switch"> <input type="checkbox"
+										name="enabled" id="enabled" th:checked="${member.enabled}">
+										<span class="slider round"> </span>
+									</label> <label for="enabled">Enabled</label>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								<ul class="list-group">
-									<li class="list-group-item" th:each="role : ${member.roles}"
-										th:text="${role}"></li>
 
-								</ul>
-							</div>
 						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="submit" value="Save Changes"
+							class="btn btn-round-sm float-left btn-danger">
+						<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
 
 					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="submit" value="Save Changes"
-						class="btn btn-round-sm float-left btn-danger">
-					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-
-				</div>
-			</form>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
+
+	<div class="modal fade" id="searchModal" role="dialog"
+		aria-labelledby="Search Modal" th:fragment="searchModalContent">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle">What are u
+						looking for?</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form class="form-inline mr-auto">
+					<div class="modal-body">
+						<div class="container">
+							<input class="form-control form-control-auto" type="text"
+								placeholder="Search" aria-label="Search">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="submit" value="Search"
+							class="btn btn-round-sm float-left btn-dark">
+						<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
 
 </body>
+
 </html>

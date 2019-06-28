@@ -1,5 +1,7 @@
 package com.agil.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -19,12 +21,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.agil.model.Member;
 import com.agil.services.MemberService;
 import com.agil.services.SecurityService;
-import com.agil.services.SettingsService;
 import com.agil.utility.MemberValidator;
 
 @Controller
@@ -35,16 +35,13 @@ public class MemberController {
 
 	@Autowired
 	private MemberValidator memberValidator;
-	
 	@Autowired
 	private SecurityService securityService;
 
-	@Autowired
-	private SettingsService settingsService;
-	
-	
 	@GetMapping("/home")
-	public String getHome(Model model) {
+	public String getHome(Model model, Principal principal) {
+		Member member = memberService.findByUsername(principal.getName()).get();
+		model.addAttribute("member", member);
 		return "index";
 	}
 
@@ -75,8 +72,6 @@ public class MemberController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String getRegisterPage(Model model) {
-		if(!settingsService.getAllowRegistration())
-			return "home";
 		model.addAttribute("memberForm", new Member());
 		return "register";
 	}
@@ -107,19 +102,15 @@ public class MemberController {
 	public String getMember(@PathVariable("id") String id, Model model) {
 		Member member = memberService.findById(Long.parseLong(id)).get();
 		model.addAttribute("member", member);
-		return "/fragments/general :: modalContents ";
+		return "/fragments/general :: memberModalContent ";
 	}
 	
-	@PostMapping("/member/update")
-	public String updateMember (@RequestParam(name = "enabled", required = false) Boolean enabled, @RequestParam("id") Long id, Model model) {
-		if(enabled == null)
-			enabled = false;
-		Member member = memberService.findById(id).orElse(null);
-		if(member != null)
-			member.setEnabled(enabled);
-		memberService.save(member);
-		return "/members";
+	@GetMapping("/search")
+	public String getSearch() {
+		return "/fragments/general :: searchModalContent ";
 	}
+	
+	
 	
 	
 }
