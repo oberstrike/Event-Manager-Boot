@@ -3,8 +3,11 @@
 <div
 	th:replace="fragments/general.html :: headerdata (title='TEMPLATE-NEEDS-CHANGE')"></div>
 <body>
-		<div th:replace="fragments/general.html :: header"></div>
-		<div th:replace="fragments/general.html :: showMembers(members= ${members})"></div>
-		<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
+	<div th:replace="fragments/general.html :: header"></div>
+	<div class="container main">
+		<div
+			th:replace="fragments/general.html :: showMembers(members= ${members})"></div>
+	</div>
+	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
 </body>
 </html>

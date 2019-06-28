@@ -52,6 +52,11 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+
+.navbar-costum {
+	 opacity: 0.6;
+}
+
 /* Rounded sliders */
 .slider.round {
   border-radius: 34px;
@@ -76,4 +81,13 @@ input:checked + .slider:before {
 .btn-auto {
 	margin-left: 0.5rem;
 	margin-right: 0.5rem;
+}
+
+.btn-costum-dark {
+	background-color: #202020;
+	margin-left: 0.5rem;
+}
+
+.main {
+	margin-top: 4.75rem
 }

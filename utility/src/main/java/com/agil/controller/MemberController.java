@@ -1,5 +1,7 @@
 package com.agil.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -37,7 +39,9 @@ public class MemberController {
 	private SecurityService securityService;
 
 	@GetMapping("/home")
-	public String getHome(Model model) {
+	public String getHome(Model model, Principal principal) {
+		Member member = memberService.findByUsername(principal.getName()).get();
+		model.addAttribute("member", member);
 		return "index";
 	}
 
@@ -98,8 +102,14 @@ public class MemberController {
 	public String getMember(@PathVariable("id") String id, Model model) {
 		Member member = memberService.findById(Long.parseLong(id)).get();
 		model.addAttribute("member", member);
-		return "/fragments/general :: modalContents ";
+		return "/fragments/general :: memberModalContent ";
 	}
+	
+	@GetMapping("/search")
+	public String getSearch() {
+		return "/fragments/general :: searchModalContent ";
+	}
+	
 	
 	
 	

@@ -33,10 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/js/**").permitAll()
 				.antMatchers("/css/**").permitAll()
 				.antMatchers("/dataprotection").permitAll()
-				.antMatchers("/register").permitAll()
+				.antMatchers("/register").permitAll()				
+				.antMatchers("/search/**").permitAll()
 				.antMatchers("/impressum").permitAll().anyRequest().authenticated().and().formLogin()
 				.loginPage("/login").permitAll().and().logout().logoutSuccessUrl("/login").permitAll().and()
-				.exceptionHandling().accessDeniedPage("/403").and().rememberMe().key("uGenerated").and().logout().and().csrf().disable();
+				.exceptionHandling().accessDeniedPage("/403").and().rememberMe().key("uSecret").and().logout().and().csrf().disable();
 	}
 
 	@Bean

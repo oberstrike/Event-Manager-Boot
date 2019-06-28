@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -54,6 +56,11 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	private Set<MemberRole> roles = new HashSet<>(Arrays.asList(MemberRole.ROLE_USER));
 
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinTable(name = "memberEvents", joinColumns = @JoinColumn(name = "id"))
+	@Column(name = "events", nullable = true)
+	private Set<Event> events = new HashSet<>();
+	
 	@NotEmpty(message = "{username.notempty}")
 	@Size(min = 6, max = 32, message = "{username.badformat}")
 	private String username;
@@ -141,4 +148,16 @@ public class Member {
 	public boolean isAdmin() {
 		return this.roles == null ? false : roles.contains(MemberRole.ROLE_ADMIN);
 	}
+	public Set<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(Set<Event> events) {
+		this.events = events;
+	}
+	
+	public void addEvent(Event event) {
+		this.events.add(event);
+	}
+	
 }
