@@ -117,16 +117,25 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<form action="#">
-				<div class="modal-body">
+			<form action="/member/update" method="POST">
+				<input type="hidden" name="id" th:value="${member.id}">
+				<div class="modal-body"> 
 					<div class="container">
 						<div class="row" th:if="${!member.isAdmin()}">
 							<div class="col">
 								<label class="switch"> <input type="checkbox"
-									name="enabled" id="enabled"
-									th:checked="${member.enabled}"> <span
-									class="slider round"> </span>
+									name="enabled" id="enabled" th:checked="${member.enabled}">
+									<span class="slider round"> </span>
 								</label> <label for="enabled">Enabled</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<ul class="list-group">
+									<li class="list-group-item" th:each="role : ${member.roles}"
+										th:text="${role}"></li>
+
+								</ul>
 							</div>
 						</div>
 
