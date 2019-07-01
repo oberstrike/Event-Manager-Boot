@@ -85,7 +85,8 @@
 		<div class="card" style="display: none">
 			<div class="card-body">
 				<h5 class="card-title" th:text="${event.name}"></h5>
-				<p class="card-text" th:text="${#dates.format(event.startDate, 'dd.MM.yyyy HH:mm') }"></p>
+				<p class="card-text"
+					th:text="${#dates.format(event.startDate, 'dd.MM.yyyy HH:mm') }"></p>
 				<a href="#" class="btn btn-primary">Go somewhere</a>
 			</div>
 		</div>
@@ -137,6 +138,23 @@
 									</label> <label for="enabled">Enabled</label>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-md-3">Username:</div>
+								<div class="col-md-9">
+									<label for="username"> <input class="form-control"
+										type="text" name="username" id="username">
+									</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">Password:</div>
+								<div class="col-md-9">
+									<label for="password"> <input class="form-control"
+										type="password" name="password" id="password">
+									</label>
+
+								</div>
+							</div>
 
 						</div>
 					</div>
@@ -185,16 +203,29 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLongTitle">Creating a new Event.</h5>
+					<h5 class="modal-title" id="exampleModalLongTitle">Creating a
+						new Event.</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form class="form-inline mr-auto">
+				<form>
 					<div class="modal-body">
 						<div class="container">
-							Here is something missing..
+							<div class="row">
+								<div class="col-md-3">Name:</div>
+								<div class="col-md-9">
+									<input class="form-control" type="text" name="name" id="name">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">Datum</div>
+								<div class="col-md-9">
+									<input class="form-control" type="text" name="startDate"
+										id="startDate">
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
