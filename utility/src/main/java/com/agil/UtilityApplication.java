@@ -2,7 +2,6 @@ package com.agil;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.agil.model.Event;
@@ -40,12 +38,15 @@ public class UtilityApplication extends SpringBootServletInitializer {
 		return (args) -> {
 			Member user = new Member(new HashSet<>(Arrays.asList(MemberRole.ROLE_USER, MemberRole.ROLE_ADMIN)),
 					"oberstrike", encoder.encode("mewtu123"), "markus.juergens@gmx.de");
+			
 			for (int i = 0; i < 10; i++) {
-				user.addEvent(new Event("VWL-Klausur " + i, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2019-06-28 09:00")));
+				Event event = new Event("VWL-Klausur " + i, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2019-06-28 09:0" + 1 * i));
+				eventRepository.save(event);
+				user.addEvent(event);
 			}
 
 			
-		
+			user.getEvents().size();
 			
 			user.setEnabled(true);
 			userRepository.save(user);

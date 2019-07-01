@@ -49,9 +49,9 @@
 							class="nav-link" th:onclick="'openSearchModal()' ">Search</p></li>
 
 					<li class="btn d-none d-sm-block">
-						<form class="form-inline mr-auto">
+						<form class="form-inline mr-auto" method="Post" action="/search">
 							<input class="form-control" type="text" placeholder="Search"
-								aria-label="Search">
+								aria-label="Search" id="searchForm" name="searchForm">
 							<button class="btn btn-costum-dark text-white" type="submit">Search</button>
 						</form>
 					</li>

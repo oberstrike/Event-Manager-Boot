@@ -1,17 +1,23 @@
 package com.agil.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-public class Event {
+public class Event implements Comparable<Event> {
+	public Event() {
+		this.isFinished = false;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +26,9 @@ public class Event {
 	@Size(min = 6, max = 16)
 	private String name;
 
+	@ManyToMany(mappedBy = "events")
+	private Set<Member> members = new HashSet<Member>();
+
 	private boolean isFinished;
 
 	@DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
@@ -27,10 +36,6 @@ public class Event {
 
 	public String getName() {
 		return name;
-	}
-
-	public Event() {
-		this.isFinished = false;
 	}
 
 	public Event(String name, Date startDate) {
@@ -65,6 +70,24 @@ public class Event {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	@Override
+	public int compareTo(Event o) {
+		return this.startDate.compareTo(o.startDate);
+	}
+
+	public void addMember(Member member) {
+		this.members.add(member);
+
+	}
+
+	public Set<Member> getMembers() {
+		return members;
+	}
+
+	public void setMembers(Set<Member> members) {
+		this.members = members;
 	}
 
 }

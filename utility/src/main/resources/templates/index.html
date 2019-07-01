@@ -4,31 +4,48 @@
 <body>
 	<div th:replace="fragments/general.html :: header"></div>
 	<div class="container main">
-
-		<th:block th:each="event, iStat : ${member.events}">
-			<th:block th:switch="${iStat.index % 4}">
-				<span th:case="'0'">
-			
-				</span>
-				<span th:case="'3'">
-	
-				</span>
-				<span th:case="*">
-					<div th:replace="fragments/general.html :: event"></div>
-				</span>
-			</th:block>
-
-		</th:block>
-
-
+		<div id="loading">Loading...</div>
 	</div>
 	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
-	<script type="text/javascript">
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		function computeEvent(memberId, index, j, div){
+			$.get("/member/" + memberId + "/event/" + index).done(function(data) {
+				var event = $(data);
+				event.addClass("order-" + j);
+				div.append(event);
+			})
+		}
+			
 		$(document).ready(function() {
+			var events = /*[[${events}]]*/[];
+
+			var length = events.length;
+			var memberId = /*[[${member.id}]]*/0;
+
+			var div = $("<div class='row'> </div>");
+			div.appendTo($(".main"));
+			
+			for (var j = 0; j < length; j++) {
+				var index = events[j] - 1;
+				console.log(index);
+				computeEvent(memberId, index, j, div);
+			
+			}
+
+		});
+
+		$(document).ajaxStop(function() {
+			$("#loading").remove();
 			$(".card").each(function(i) {
-				$(this).delay(275 * i).slideDown(500);
+				$(this).delay(225 * i).show(500);
 			});
 		});
+		/*]]>*/
 	</script>
+
+	<div id="btn-footer">
+		<button class="btn btn-danger">&plus;</button>
+	</div>
 </body>
 </html>

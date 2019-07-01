@@ -1,6 +1,10 @@
 package com.agil.controller;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.agil.model.Event;
 import com.agil.model.Member;
+import com.agil.services.EventService;
 import com.agil.services.MemberService;
 import com.agil.services.SecurityService;
 import com.agil.utility.MemberValidator;
@@ -35,13 +41,19 @@ public class MemberController {
 
 	@Autowired
 	private MemberValidator memberValidator;
+
 	@Autowired
 	private SecurityService securityService;
+
+	@Autowired
+	private EventService eventService;
 
 	@GetMapping("/home")
 	public String getHome(Model model, Principal principal) {
 		Member member = memberService.findByUsername(principal.getName()).get();
 		model.addAttribute("member", member);
+		
+		model.addAttribute("events", member.getEvents().stream().mapToInt(each -> (int) each.getId()).sorted().toArray());
 		return "index";
 	}
 
@@ -97,20 +109,24 @@ public class MemberController {
 		model.addAttribute("members", memberService.findAll());
 		return "members";
 	}
-	
+
 	@GetMapping("/member/{id}")
 	public String getMember(@PathVariable("id") String id, Model model) {
 		Member member = memberService.findById(Long.parseLong(id)).get();
 		model.addAttribute("member", member);
 		return "/fragments/general :: memberModalContent ";
 	}
-	
-	@GetMapping("/search")
-	public String getSearch() {
-		return "/fragments/general :: searchModalContent ";
+
+	@GetMapping("/member/{memberid}/event/{eventid}")
+	public String getMemberEvent(@PathVariable("memberid") String memberId, @PathVariable("eventid") String eventId,
+			Model model) {
+		Member member = memberService.findById(Long.parseLong(memberId)).get();
+		List<Event> events = member.getEvents().stream().collect(Collectors.toList());
+		Collections.sort(events);
+		Event event = events.get(Integer.parseInt(eventId));
+		if (event != null)
+			model.addAttribute("event", event);
+		return "/fragments/general :: event ";
 	}
-	
-	
-	
-	
+
 }

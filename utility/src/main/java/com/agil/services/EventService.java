@@ -1,5 +1,8 @@
 package com.agil.services;
 
-public interface EventService {
+import com.agil.model.Event;
 
+public interface EventService {
+	public void save(Event event);
+	
 }
