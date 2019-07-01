@@ -3,6 +3,7 @@ package com.agil;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -40,7 +41,7 @@ public class UtilityApplication extends SpringBootServletInitializer {
 					"oberstrike", encoder.encode("mewtu123"), "markus.juergens@gmx.de");
 			
 			for (int i = 0; i < 10; i++) {
-				Event event = new Event("VWL-Klausur " + i, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2019-06-28 09:0" + 1 * i));
+				Event event = new Event("VWL-Klausur " + new Random().nextInt(100), new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2019-07-28 09:0" + 1 * i));
 				eventRepository.save(event);
 				user.addEvent(event);
 			}

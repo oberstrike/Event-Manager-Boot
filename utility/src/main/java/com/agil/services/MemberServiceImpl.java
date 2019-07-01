@@ -3,7 +3,6 @@ package com.agil.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -17,6 +16,7 @@ import com.agil.repos.MemberRepository;
 
 @Service
 public class MemberServiceImpl implements MemberService {
+	
 	@Autowired
 	public BCryptPasswordEncoder encoder;
 	@Autowired

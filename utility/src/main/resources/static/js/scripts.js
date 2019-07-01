@@ -11,6 +11,14 @@ function openSearchModal() {
 	})
 }
 
+function openEventModal(){
+	$.get("/event").done(function(data){
+		$("#searchModalHolder").html(data);
+		$("#eventModal").modal("show");
+	
+	})
+}
+
 $(document).ready(function() {
 	$('<div id="searchModalHolder"></div>').appendTo(document.body);
 

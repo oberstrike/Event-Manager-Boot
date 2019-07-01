@@ -7,6 +7,8 @@
 		<div id="loading">Loading...</div>
 	</div>
 	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
+	
+	
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 		function computeEvent(memberId, index, j, div){
@@ -45,7 +47,7 @@
 	</script>
 
 	<div id="btn-footer">
-		<button class="btn btn-danger">&plus;</button>
+		<button class="btn btn-danger"  th:onclick="'openEventModal()'">&plus;</button>
 	</div>
 </body>
 </html>
