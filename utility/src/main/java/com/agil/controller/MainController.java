@@ -43,8 +43,5 @@ public class MainController {
 		return "redirect:/home";
 	}
 
-	@GetMapping("/event")
-	public String getMember(Model model) {
-		return "/fragments/general :: eventModalContent ";
-	}
+
 }

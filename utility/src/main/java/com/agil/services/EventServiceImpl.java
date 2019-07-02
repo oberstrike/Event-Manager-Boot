@@ -1,5 +1,7 @@
 package com.agil.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,11 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public void save(Event event) {
 		eventRepository.save(event);
+	}
+
+	@Override
+	public List<Event> findByMembers_Name(String name) {
+		return eventRepository.findByMembers_Username(name);
 	}
 
 }

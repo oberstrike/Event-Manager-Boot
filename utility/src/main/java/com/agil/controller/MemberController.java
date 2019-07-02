@@ -45,8 +45,6 @@ public class MemberController {
 	@Autowired
 	private SecurityService securityService;
 
-	@Autowired
-	private EventService eventService;
 
 	@GetMapping("/home")
 	public String getHome(Model model, Principal principal) {
@@ -117,16 +115,6 @@ public class MemberController {
 		return "/fragments/general :: memberModalContent ";
 	}
 
-	@GetMapping("/member/{memberid}/event/{eventid}")
-	public String getMemberEvent(@PathVariable("memberid") String memberId, @PathVariable("eventid") String eventId,
-			Model model) {
-		Member member = memberService.findById(Long.parseLong(memberId)).get();
-		List<Event> events = member.getEvents().stream().collect(Collectors.toList());
-		Collections.sort(events);
-		Event event = events.get(Integer.parseInt(eventId));
-		if (event != null)
-			model.addAttribute("event", event);
-		return "/fragments/general :: event ";
-	}
+	
 
 }
