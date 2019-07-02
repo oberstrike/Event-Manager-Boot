@@ -23,7 +23,8 @@ public class EventController {
 	private EventService eventService;
 	
 	@GetMapping("/event")
-	public String getEvent(Model model) {
+	public String getEvent(Event eventForm ,Model model) {
+		model.addAttribute("eventForm", eventForm);
 		return "/fragments/general :: eventModalContent ";
 	}
 	
