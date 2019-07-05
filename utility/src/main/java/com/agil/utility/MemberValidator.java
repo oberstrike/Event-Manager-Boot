@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
 import com.agil.services.MemberService;
 
@@ -18,12 +19,12 @@ public class MemberValidator implements Validator{
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Member.class.equals(clazz);
+		return MemberDTO.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Member member = (Member) target;
+		MemberDTO member = (MemberDTO) target;
 		
 		Optional<Member> oMember = memberService.findByUsername(member.getUsername());
 		

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
 
 public interface MemberService {
@@ -17,4 +18,6 @@ public interface MemberService {
 	Optional<Member> findByEmail(String email);
 
 	List<Member> findAll();
+
+	void createAndRegister(@Valid MemberDTO memberForm);
 }

@@ -12,6 +12,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -26,11 +27,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.agil.dto.MemberDTO;
 import com.agil.model.Event;
 import com.agil.model.Member;
 import com.agil.services.EventService;
 import com.agil.services.MemberService;
 import com.agil.services.SecurityService;
+import com.agil.services.SettingsService;
 import com.agil.utility.MemberValidator;
 
 @Controller
@@ -45,6 +48,8 @@ public class MemberController {
 	@Autowired
 	private SecurityService securityService;
 
+	@Autowired
+	private SettingsService settingsService;
 
 	@GetMapping("/home")
 	public String getHome(Model model, Principal principal) {
@@ -82,20 +87,26 @@ public class MemberController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String getRegisterPage(Model model) {
-		model.addAttribute("memberForm", new Member());
+		if(!settingsService.getAllowRegistration())
+			return "redirect:/login";
+		
+		model.addAttribute("memberForm", new MemberDTO());
 		return "register";
 	}
 
 	@PostMapping("/register")
 	@PreAuthorize("hasRole('ROLE_ANONYMOUS')")
-	public String registration(@Valid @ModelAttribute("memberForm") Member memberForm, BindingResult bindingResult,
+	public String registration(@Valid @ModelAttribute("memberForm") MemberDTO memberForm, BindingResult bindingResult,
 			@RequestHeader(required = false) String referer) {
+		if(!settingsService.getAllowRegistration())
+			return "redirect:/login";
+		
 		memberValidator.validate(memberForm, bindingResult);
 		String password = memberForm.getPassword();
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
-		memberService.save(memberForm);
+		memberService.createAndRegister(memberForm);
 		securityService.autoLogin(memberForm.getUsername(), password);
 
 		return "redirect:/home";
@@ -111,7 +122,7 @@ public class MemberController {
 	@GetMapping("/member/{id}")
 	public String getMember(@PathVariable("id") String id, Model model) {
 		Member member = memberService.findById(Long.parseLong(id)).get();
-		model.addAttribute("member", member);
+		model.addAttribute("member", new MemberDTO(member));
 		return "/fragments/general :: memberModalContent ";
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.data.util.StreamUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
 import com.agil.repos.MemberRepository;
 
@@ -46,6 +47,12 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<Member> findAll() {
 		return StreamUtils.createStreamFromIterator(userRepo.findAll().iterator()).collect(Collectors.toList());
+	}
+
+	@Override
+	public void createAndRegister(@Valid MemberDTO memberForm) {
+		Member member = new Member(memberForm);
+		save(member);
 	}
 
 }

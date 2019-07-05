@@ -21,31 +21,53 @@ public class EventController {
 
 	@Autowired
 	private EventService eventService;
-	
+
 	@GetMapping("/event")
-	public String getEvent(Event eventForm ,Model model) {
+	public String getEvent(Event eventForm, Model model) {
 		model.addAttribute("eventForm", eventForm);
 		return "/fragments/general :: eventModalContent ";
 	}
-	
+
 	@GetMapping("/event/{id}")
 	public String getEventById(@PathVariable("id") String id, Model model, Principal principal) {
-		if(id == null)
+		if (id == null)
 			return "redirect:/home";
-		if(!NumberUtils.isDigits(id))
+		if (!NumberUtils.isDigits(id))
 			return "redirect:/home";
 		int index = Integer.valueOf(id);
-		List<Event> events =  eventService.findByMembers_Name(principal.getName());
-		if(index < 0 || index >= events.size())
+		List<Event> events = eventService.findByMembers_Name(principal.getName());
+		if (index < 0 || index >= events.size())
 			return "redirect:/home";
-		Collections.sort(events);	
+		Collections.sort(events);
 		Event event = events.get(index);
 		model.addAttribute("event", event);
 		return "/fragments/general :: event ";
-		
+
 	}
-	
-	
-	
+
+	@GetMapping("/event/remove/{id}")
+	public String removeEventById(@PathVariable("id") String id, Model model, Principal principal) {
+		String failMessage = "Upps there was a mistake";
+		String successMessage ="The event was removed successfully";
+		boolean fail = false;
+
+		fail = (id == null);
+		if (!fail)
+			fail = (!NumberUtils.isDigits(id));
+
+		int index = Integer.valueOf(id);
+
+		List<Event> events = eventService.findByMembers_Name(principal.getName());
+		fail = (index < 0 || index >= events.size());
+		if (!fail) {
+			Collections.sort(events);
+			events.remove(index);
+			model.addAttribute("success", successMessage);
+		} else {
+			model.addAttribute("fail", failMessage);
+		}
+
+		return "redirect:/home";
+	}
 
 }

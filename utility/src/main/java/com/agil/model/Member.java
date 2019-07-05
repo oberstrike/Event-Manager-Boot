@@ -18,17 +18,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.agil.dto.MemberDTO;
 import com.agil.utility.MemberRole;
 
 @Entity
 public class Member {
 
 	public Member() {
-	}
+		this.enabled = false;
+}
 
 	public Member(Set<MemberRole> roles,
 			@NotEmpty(message = "{username.notempty}") @Size(min = 6, max = 32, message = "{username.badformat}") String username,
@@ -39,6 +42,13 @@ public class Member {
 		this.username = username;
 		this.password = password;
 		this.email = email;
+	}
+
+	public Member(@Valid MemberDTO memberForm) {
+		this.username = memberForm.getUsername();
+		this.password = memberForm.getPassword();
+		this.email = memberForm.getEmail();
+		
 	}
 
 	@Id
@@ -58,22 +68,12 @@ public class Member {
 	@JoinTable(name = "member_event", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
 	private Set<Event> events = new HashSet<>();
 
-	@NotEmpty(message = "{username.notempty}")
-	@Size(min = 6, max = 32, message = "{username.badformat}")
 	private String username;
 
-	@NotEmpty(message = "{password.notempty}")
 	private String password;
 
-	@Email
-	@NotEmpty(message = "{email.notempty}")
 	private String email;
 
-	@Transient
-	@Size(min = 8, max = 32, message = "{password.badformat}")
-	private String passwordConfirm;
-
-	@Transient
 	private boolean agb;
 
 	public long getId() {
@@ -116,13 +116,6 @@ public class Member {
 		this.email = email;
 	}
 
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
-
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
-	}
 
 	public boolean isAgb() {
 		return agb;

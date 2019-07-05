@@ -81,10 +81,17 @@
 	</div>
 
 
-	<div class="col-sm-3" th:fragment="event">
+	<div class="col-md-4" th:fragment="event">
 		<div class="card" style="display: none">
 			<div class="card-body">
-				<h5 class="card-title" th:text="${event.name}"></h5>
+				<form method="get" th:action="@{/event/remove/}+ ${event.id}">
+					<h5 class="card-title">
+						<span th:text="${event.name}"></span>
+						<button type="button" class="close" aria-label="remove">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</h5>
+				</form>
 				<p class="card-text"
 					th:text="${#dates.format(event.startDate, 'dd.MM.yyyy HH:mm') }"></p>
 				<a href="#" class="btn btn-primary">Go somewhere</a>
