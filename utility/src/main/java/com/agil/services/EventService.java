@@ -1,13 +1,27 @@
 package com.agil.services;
 
-import java.security.Principal;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
 
 import com.agil.model.Event;
+import com.agil.model.Member;
 
 public interface EventService {
 	public void save(Event event);
 
 	public List<Event> findByMembers_Name(String name);
-	
+
+	void delete(Event event);
+
+	void deleteById(Long id);
+
+	public Optional<Event> findById(long parseLong);
+
+	public List<Event> findByStartDateBetween(Date currentDate, Date after);
+
+	public void createAndSave(@Valid Event event, Member member);
+
 }

@@ -3,53 +3,18 @@
 <div th:replace="fragments/general.html :: headerdata (title='Index')"></div>
 <body>
 	<div th:replace="fragments/general.html :: header"></div>
-	<div class="container main">
-		<div class="row">
-			<div class="col " th:if="${success}"><div class="alert alert-success" th:text="${success}"></div></div>
-			<div class="col" th:if="${fail}"><div class="alert alert-danger" th:text="${fail}"></div></div>
-		</div>
-		<div id="loading">Loading...</div>
-	</div>
-	
+	<div class="container main"></div>
+
 	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
-	
-	<script th:inline="javascript">
-		/*<![CDATA[*/
-		function computeEvent(index, j, div){
-			$.get("/event/" + index).done(function(data) {
-				var event = $(data);
-				event.addClass("order-" + j);
-				div.append(event);
-			})
-		}
-			
-		$(document).ready(function() {
-			var events = /*[[${events}]]*/[];
-			var length = events.length;
-
-			var div = $("<div class='row'> </div>");
-			div.appendTo($(".main"));
-			
-			for (var j = 0; j < length; j++) {
-				var index = events[j] - 1;
-				console.log(index);
-				computeEvent( index, j, div);
-			
-			}
-
-		});
-
-		$(document).ajaxStop(function() {
-			$("#loading").remove();
-			$(".card").each(function(i) {
-				$(this).delay(225 * i).show(500);
-			});
-		});
-		/*]]>*/
-	</script>
-
 	<div id="btn-footer">
-		<button class="btn btn-danger"  th:onclick="'openEventModal()'">&plus;</button>
+		<button class="btn btn-danger" th:onclick="'openEventModal()'">&plus;</button>
 	</div>
+
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			loadEvents();
+
+		})
+	</script>
 </body>
 </html>

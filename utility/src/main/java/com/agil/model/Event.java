@@ -5,10 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,7 +25,8 @@ public class Event implements Comparable<Event> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Size(min = 6, max = 16)
+	@Size(min = 6, max = 16, message = "{event.name.notempty}")
+	@NotNull(message = "{event.name.notempty}")
 	private String name;
 
 	@ManyToMany(mappedBy = "events")
@@ -32,6 +35,7 @@ public class Event implements Comparable<Event> {
 	private boolean isFinished;
 
 	@DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
+	@NotNull(message = "{event.date.badformat}")
 	private Date startDate;
 
 	public String getName() {

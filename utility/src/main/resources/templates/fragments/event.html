@@ -1,0 +1,37 @@
+
+<!--  style="display: none" -->
+<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6" th:fragment="showEvent">
+	<div class="card">
+		<div class="card-body">
+			<form method="get" th:action="@{/event/remove/}+ ${event.id}">
+				<h5 class="card-title">
+					<span th:text="${event.name}"></span>
+					<button type="button" class="close" aria-label="remove"
+						th:onclick="'removeEvent(\'' + ${event.id} + '\');'">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</h5>
+			</form>
+			<p class="card-text"
+				th:text="${#dates.format(event.startDate, 'dd.MM.yyyy HH:mm') }"></p>
+			<a href="#" class="btn btn-primary" th:text="${event.isFinished()}">Go
+				To Event</a>
+		</div>
+	</div>
+</div>
+
+
+
+<th:block th:fragment="showEvents">
+	<th:block th:if="${events}">
+		<div class="row event">
+			<th:block th:each="event: ${events}">
+				<div th:unless="${event.isFinished()}">
+					<div
+						th:replace="fragments/event.html :: showEvent(event= ${event})"></div>
+
+				</div>
+			</th:block>
+		</div>
+	</th:block>
+</th:block>

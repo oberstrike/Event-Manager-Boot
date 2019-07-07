@@ -75,30 +75,17 @@
 		<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
 		<script src="/js/scripts.js"></script>
 
-		<script type="text/javascript">
-			
+		<script th:inline="javascript" th:if="${message}">
+			/*<![CDATA[*/
+			$(document).ready(function() {
+				var message = /*[[${message}]]*/"";
+				if (message.length != 0) {
+					openAlertModal(message);
+				}
+			});
+			/*]]>*/
 		</script>
 	</div>
-
-
-	<div class="col-md-4" th:fragment="event">
-		<div class="card" style="display: none">
-			<div class="card-body">
-				<form method="get" th:action="@{/event/remove/}+ ${event.id}">
-					<h5 class="card-title">
-						<span th:text="${event.name}"></span>
-						<button type="button" class="close" aria-label="remove">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</h5>
-				</form>
-				<p class="card-text"
-					th:text="${#dates.format(event.startDate, 'dd.MM.yyyy HH:mm') }"></p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
-			</div>
-		</div>
-	</div>
-
 	<div th:fragment="showMembers">
 		<div class="row" th:if="${members}">
 			<div class="col bg-dark text-white">
@@ -134,7 +121,8 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form action="#">
+				<form th:action="@{/member/}+ ${member.id}" method="post"
+					th:object="${member}">
 					<div class="modal-body">
 						<div class="container">
 							<div class="row" th:if="${!member.isAdmin()}">
@@ -148,9 +136,11 @@
 							<div class="row">
 								<div class="col-md-3">Username:</div>
 								<div class="col-md-9">
-									<label for="username"> <input class="form-control"
-										type="text" name="username" id="username">
-									</label>
+									<label for="username"> <input
+										th:value="${member.username}" class="form-control" type="text"
+										name="username" id="username">
+									</label> <input id="email" name="email" type="hidden"
+										th:value="${member.email}" />
 								</div>
 							</div>
 							<div class="row">
@@ -159,10 +149,17 @@
 									<label for="password"> <input class="form-control"
 										type="password" name="password" id="password">
 									</label>
-
 								</div>
 							</div>
-
+							<div class="row">
+								<div class="col-md-3">Confirmation:</div>
+								<div class="col-md-9">
+									<label for="passwordConfirm"> <input
+										class="form-control" type="password" name="passwordConfirm"
+										id="passwordConfirm">
+									</label>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -217,11 +214,11 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form>
+				<form action="/event/add" method="Post" th:object="${event}">
 					<div class="modal-body">
 						<div class="container">
 							<div class="row">
-								<div class="col-md-3">Name:</div>
+								<div class="col-md-3" style="padding-bottom: 0.5rem">Name:</div>
 								<div class="col-md-9">
 									<input class="form-control" type="text" name="name" id="name">
 								</div>
@@ -245,6 +242,8 @@
 			</div>
 		</div>
 	</div>
+
+
 
 
 </body>

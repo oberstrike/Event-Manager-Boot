@@ -17,8 +17,12 @@ public class MemberDTO {
 		username = member.getUsername();
 		email = member.getEmail();
 		isAdmin = member.isAdmin();
+		enabled = member.isEnabled();
+		id = member.getId();
 		
 	}
+	
+	private long id;
 
 	@NotEmpty(message = "{username.notempty}")
 	@Size(min = 6, max = 32, message = "{username.badformat}")
@@ -33,8 +37,14 @@ public class MemberDTO {
 	
 	private boolean isAdmin;
 	
+	private boolean enabled;
+	
 	public boolean isAdmin() {
 		return this.isAdmin;
+	}
+	
+	public void setIsAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 	public String getUsername() {
@@ -75,6 +85,22 @@ public class MemberDTO {
 
 	public void setAgb(boolean agb) {
 		this.agb = agb;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	@Transient

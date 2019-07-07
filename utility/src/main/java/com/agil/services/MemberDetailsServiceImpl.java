@@ -39,7 +39,7 @@ public class MemberDetailsServiceImpl implements UserDetailsService {
 			grantedAuthorities.add(new SimpleGrantedAuthority(role.toString()));
 		}
 
-		return new MyUser(member, true, true, true, true, grantedAuthorities);
+		return new MyUser(member, member.isEnabled(), true, true, true, grantedAuthorities);
 
 	}
 

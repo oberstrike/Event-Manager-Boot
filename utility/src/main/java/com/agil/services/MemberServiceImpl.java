@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
+import com.agil.model.VerificationToken;
 import com.agil.repos.MemberRepository;
+import com.agil.repos.VerificationTokenRepository;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -22,6 +24,8 @@ public class MemberServiceImpl implements MemberService {
 	public BCryptPasswordEncoder encoder;
 	@Autowired
 	private MemberRepository userRepo;
+	@Autowired
+	private VerificationTokenRepository tokenRepository;
 
 	@Override
 	public Optional<Member> findById(long id) {
@@ -50,9 +54,36 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void createAndRegister(@Valid MemberDTO memberForm) {
+	public Member createAndRegister(@Valid MemberDTO memberForm) {
 		Member member = new Member(memberForm);
+		save(member);
+		return member;
+	}
+
+	@Override
+	public void changeMember(Member member, MemberDTO memberForm) {
+		if(memberForm.getPassword().equals(memberForm.getPasswordConfirm()));
+			member.setPassword(memberForm.getPassword());
+		if(!memberForm.getUsername().equals(member.getUsername()))	
+			if(!findByUsername(memberForm.getUsername()).isPresent())
+				member.setUsername(memberForm.getUsername());
 		save(member);
 	}
 
+	@Override
+	public void refresh(Member member) {
+		userRepo.save(member);
+	}
+
+	@Override
+	public void createVerificationToken(Member member, String token) {
+		VerificationToken mytoken = new VerificationToken(token, member);
+		tokenRepository.save(mytoken);
+	}
+	
+	@Override
+	public VerificationToken getToken(String token) {
+		return tokenRepository.findByToken(token);
+	}
+	
 }

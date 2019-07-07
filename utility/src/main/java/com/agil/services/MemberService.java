@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
+import com.agil.model.VerificationToken;
 
 public interface MemberService {
 	Optional<Member> findById(long id);
@@ -19,5 +20,13 @@ public interface MemberService {
 
 	List<Member> findAll();
 
-	void createAndRegister(@Valid MemberDTO memberForm);
+	Member createAndRegister(@Valid MemberDTO memberForm);
+
+	void changeMember(Member member, MemberDTO memberForm);
+
+	void refresh(Member member);
+
+	void createVerificationToken(Member member, String token);
+
+	VerificationToken getToken(String token);
 }

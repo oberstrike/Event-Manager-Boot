@@ -68,6 +68,21 @@ input:checked+.slider:before {
 .card {
 	margin-bottom: 2rem;
 	width: 16rem;
+	transition-property: width;
+	transition-duration: 0.2s;
+	transition-timing-function: ease-in;
+	animation: heading;
+	animation-duration: 0.5s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes heading{ 
+	0%{ transform: translateY(100px); }
+	100%{ transform: translateY(0px); } 
+}
+
+.card:hover{
+	width:17rem;
 }
 
 .form-control-auto {
@@ -97,3 +112,6 @@ input:checked+.slider:before {
 .main {
 	margin-top: 4.75rem
 }
+
+
+

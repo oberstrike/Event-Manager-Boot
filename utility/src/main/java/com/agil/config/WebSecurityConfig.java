@@ -1,5 +1,7 @@
 package com.agil.config;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,12 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/registration").permitAll()
 				.antMatchers("/webjars/**").permitAll()
+				.antMatchers("/registrationConfirm").permitAll()
 				.antMatchers("/images/**").permitAll()
 				.antMatchers("/js/**").permitAll()
 				.antMatchers("/css/**").permitAll()
 				.antMatchers("/dataprotection").permitAll()
 				.antMatchers("/register").permitAll()				
 				.antMatchers("/search/**").permitAll()
+				.antMatchers("/alert/**").permitAll()
 				.antMatchers("/impressum").permitAll().anyRequest().authenticated().and().formLogin()
 				.loginPage("/login").permitAll().and().logout().logoutSuccessUrl("/login").permitAll().and()
 				.exceptionHandling().accessDeniedPage("/403").and().rememberMe().key("uSecret").and().logout().and().csrf().disable();
@@ -49,5 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
+
+	
 
 }
