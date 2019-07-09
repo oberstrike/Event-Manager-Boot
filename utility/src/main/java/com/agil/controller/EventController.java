@@ -37,7 +37,7 @@ public class EventController {
 
 	@Autowired
 	private MemberService memberService;
-	
+
 	private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
@@ -47,9 +47,7 @@ public class EventController {
 	public String getEvents(Model model, Principal principal) {
 		List<Event> events = eventService.findByMembers_Name(principal.getName());
 		Collections.sort(events);
-
 		model.addAttribute("events", events);
-
 		return "/fragments/event :: showEvents";
 	}
 
@@ -75,16 +73,17 @@ public class EventController {
 		return "/fragments/general :: event ";
 
 	}
-	
+
 	@PostMapping("/event/add")
-	public String addEvent(@Valid @ModelAttribute("event") Event event, BindingResult bindingResult, Model model, Principal principal, RedirectAttributes redirectAttributes) {
-		if(bindingResult.hasErrors()) {
+	public String addEvent(@Valid @ModelAttribute("event") Event event, BindingResult bindingResult, Model model,
+			Principal principal, RedirectAttributes redirectAttributes) {
+		if (bindingResult.hasErrors()) {
 			String message = "";
 			for (ObjectError error : bindingResult.getAllErrors()) {
 				message += error.getDefaultMessage() + "\n";
-			}			
+			}
 			redirectAttributes.addFlashAttribute("message", message);
-			return "redirect:/home";	
+			return "redirect:/home";
 		}
 		Member member = memberService.findByUsername(principal.getName()).get();
 		eventService.createAndSave(event, member);
@@ -108,8 +107,6 @@ public class EventController {
 
 		return "redirect:/events";
 	}
-	
-	@PostMapping("/event")
 
 	@Scheduled(fixedRate = 1000 * 60)
 	@Transactional
@@ -117,12 +114,10 @@ public class EventController {
 		logger.info("--- Starting Job ---");
 		Date currentDate = new Date(System.currentTimeMillis());
 		Date after = new Date(System.currentTimeMillis() + 1000 * 60);
-		List<Event> events = eventService.findByStartDateBetween(currentDate, after);
-		for (Event event : events) {
 
-			eventPublisher.publishEvent(new OnEventIsActiveEvent(event));
-		}
-		logger.info("Events: " + events.size());
+		eventService.findByStartDateBetween(currentDate, after).parallelStream()
+				.forEach(each -> eventPublisher.publishEvent(new OnEventIsActiveEvent(each)));
+		
 		logger.info("--- Ending Job ---");
 
 	}

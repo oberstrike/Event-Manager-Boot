@@ -5,8 +5,11 @@
 <body>
 	<div th:replace="fragments/general.html :: header"></div>
 	<div class="container main">
+		<div id="btn-footer">
+			<button class="btn btn-danger" onclick="openMemberModal(0)">+</button>
+		</div>
 		<div
-			th:replace="fragments/general.html :: showMembers(members= ${members})"></div>
+			th:replace="fragments/member.html :: showMembers(members= ${members})"></div>
 	</div>
 	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
 </body>

@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -20,6 +20,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.agil.config.MailConfig;
+import com.agil.dto.EventDTO;
+import com.agil.dto.MemberDTO;
 import com.agil.model.Event;
 import com.agil.model.Member;
 import com.agil.repos.EventRepository;
@@ -65,11 +67,11 @@ public class UtilityApplication extends SpringBootServletInitializer {
 					"oberstrike@gmx.de");
 			user.setEnabled(true);
 			userRepository.save(user);
-			
+
 		};
 
 	}
-	
+
 	@Autowired
 	private MailConfig config;
 
@@ -92,5 +94,24 @@ public class UtilityApplication extends SpringBootServletInitializer {
 		return mailSender;
 	}
 
+	@Bean
+	public Member getMember() {
+		return new Member();
+	}
+
+	@Bean
+	public MemberDTO getMemberDTO() {
+		return new MemberDTO();
+	}
+
+	@Bean
+	public Event getEvent() {
+		return new Event();
+	}
+
+	@Bean
+	public EventDTO getEventDTO() {
+		return new EventDTO();
+	}
 
 }

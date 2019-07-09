@@ -1,8 +1,5 @@
 package com.agil.utility;
 
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,7 +10,7 @@ import com.agil.model.Event;
 import com.agil.model.Member;
 
 @Component
-public class EventListener  implements ApplicationListener<OnEventIsActiveEvent>{
+public class EventListener implements ApplicationListener<OnEventIsActiveEvent>{
 
 	@Autowired
 	private JavaMailSender mailSender;

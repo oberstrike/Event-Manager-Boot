@@ -5,22 +5,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.agil.model.Member;
-
 public class MemberDTO {
 
 	public MemberDTO() {
 
 	}
 
-	public MemberDTO(Member member) {
-		username = member.getUsername();
-		email = member.getEmail();
-		isAdmin = member.isAdmin();
-		enabled = member.isEnabled();
-		id = member.getId();
-		
-	}
 	
 	private long id;
 

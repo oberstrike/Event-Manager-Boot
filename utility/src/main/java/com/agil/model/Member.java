@@ -44,12 +44,6 @@ public class Member {
 		this.email = email;
 	}
 
-	public Member(@Valid MemberDTO memberForm) {
-		this.username = memberForm.getUsername();
-		this.password = memberForm.getPassword();
-		this.email = memberForm.getEmail();
-		
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

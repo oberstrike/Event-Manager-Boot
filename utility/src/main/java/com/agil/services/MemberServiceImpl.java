@@ -11,6 +11,7 @@ import org.springframework.data.util.StreamUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.agil.dto.DTOConverter;
 import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
 import com.agil.model.VerificationToken;
@@ -19,13 +20,15 @@ import com.agil.repos.VerificationTokenRepository;
 
 @Service
 public class MemberServiceImpl implements MemberService {
-	
+
 	@Autowired
 	public BCryptPasswordEncoder encoder;
 	@Autowired
 	private MemberRepository userRepo;
 	@Autowired
 	private VerificationTokenRepository tokenRepository;
+	@Autowired
+	private DTOConverter converter;
 
 	@Override
 	public Optional<Member> findById(long id) {
@@ -55,18 +58,22 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Member createAndRegister(@Valid MemberDTO memberForm) {
-		Member member = new Member(memberForm);
+		Member member = converter.convertToMember(memberForm);
 		save(member);
 		return member;
 	}
 
 	@Override
 	public void changeMember(Member member, MemberDTO memberForm) {
-		if(memberForm.getPassword().equals(memberForm.getPasswordConfirm()));
-			member.setPassword(memberForm.getPassword());
-		if(!memberForm.getUsername().equals(member.getUsername()))	
-			if(!findByUsername(memberForm.getUsername()).isPresent())
+		if (memberForm.getPassword().equals(memberForm.getPasswordConfirm()))
+			;
+		member.setPassword(memberForm.getPassword());
+		if (!memberForm.getUsername().equals(member.getUsername()))
+			if (!findByUsername(memberForm.getUsername()).isPresent())
 				member.setUsername(memberForm.getUsername());
+		if (member.isEnabled() != memberForm.isEnabled())
+			member.setEnabled(memberForm.isEnabled());
+
 		save(member);
 	}
 
@@ -80,10 +87,10 @@ public class MemberServiceImpl implements MemberService {
 		VerificationToken mytoken = new VerificationToken(token, member);
 		tokenRepository.save(mytoken);
 	}
-	
+
 	@Override
 	public VerificationToken getToken(String token) {
 		return tokenRepository.findByToken(token);
 	}
-	
+
 }

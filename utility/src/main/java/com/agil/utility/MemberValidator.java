@@ -12,11 +12,11 @@ import com.agil.model.Member;
 import com.agil.services.MemberService;
 
 @Component
-public class MemberValidator implements Validator{
+public class MemberValidator implements Validator {
 
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return MemberDTO.class.equals(clazz);
@@ -25,27 +25,22 @@ public class MemberValidator implements Validator{
 	@Override
 	public void validate(Object target, Errors errors) {
 		MemberDTO member = (MemberDTO) target;
-		
+
 		Optional<Member> oMember = memberService.findByUsername(member.getUsername());
-		
-		if(oMember.isPresent())
+
+		if (oMember.isPresent())
 			errors.rejectValue("username", "username.duplicate");
 		oMember = memberService.findByEmail(member.getEmail());
-		if(oMember.isPresent())
+		if (oMember.isPresent())
 			errors.rejectValue("email", "email.notduplicated");
-		
-		if(!member.isAgb())
+
+		if (!member.isAgb())
 			errors.rejectValue("agb", "agb.musttrue");
-		if(member.getPassword() == null | member.getPasswordConfirm() == null) {
-			errors.rejectValue("password", "password.notempty");
-		}else {
-			if(!member.getPassword().equals(member.getPasswordConfirm())) {
-				errors.rejectValue("password", "password.notequal");
-			}
+
+		if (!member.getPassword().equals(member.getPasswordConfirm())) {
+			errors.rejectValue("password", "password.notequal");
 		}
-		
-		
-		
+
 	}
 
 }
