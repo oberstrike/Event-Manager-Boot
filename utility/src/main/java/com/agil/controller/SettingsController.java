@@ -11,26 +11,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.agil.services.SettingsService;
 
 @Controller
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class SettingsController {
 
 	@Autowired
 	private SettingsService settingsService;
-	
+
 	@GetMapping("/settings")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String getSettings(Model model) {
 		model.addAttribute("registration", settingsService.getAllowRegistration());
 		return "settings";
 	}
-	
+
 	@PostMapping("/settings/update")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public String updateSettings(@RequestParam(name = "registration", required = false) Boolean registration, Model model) {
-		if(registration == null)
+	public String updateSettings(@RequestParam(name = "registration", required = false) Boolean registration,
+			Model model) {
+		if (registration == null)
 			registration = false;
 		settingsService.setAllowRegistration(registration);
 		return "settings";
 	}
-	
-	
+
 }

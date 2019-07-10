@@ -46,6 +46,7 @@ public class DTOConverter {
 		memberDTO.setEmail(member.getEmail());
 		memberDTO.setUsername(member.getUsername());
 		memberDTO.setIsAdmin(member.isAdmin());
+		memberDTO.setPassword(member.getPassword());
 		return memberDTO;
 	}
 	
@@ -54,6 +55,7 @@ public class DTOConverter {
 		member.setAgb(memberDTO.isAgb());
 		member.setEmail(memberDTO.getEmail());
 		member.setUsername(memberDTO.getUsername());
+		member.setPassword(memberDTO.getPassword());
 		return member;
 	}
 

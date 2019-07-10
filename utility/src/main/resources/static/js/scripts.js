@@ -22,12 +22,23 @@ function openEventModal() {
 	})
 }
 
-function openAlertModal(message){
-	console.log("Öffne Alert Modal");
-	$.get("/alert?message=" + message).done(function(data){
-		$("#searchModalHolder").html(data);
-		$("#alertModal").modal("show");
-	});
+function openAlertModal(param) {
+
+	/*
+	 * console.log("Öffne Alert Modal"); $.get("/alert?message=" +
+	 * message).done(function(data){ $("#searchModalHolder").html(data);
+	 * $("#alertModal").modal("show"); });
+	 */
+	$.notify({
+		message : param
+	}, {
+		type : "info",
+		placement : {
+			from : "bottom",
+			align : "right"
+		}
+	})
+
 }
 
 function removeEvent(id) {
@@ -35,6 +46,7 @@ function removeEvent(id) {
 	$.get("/event/remove/" + id).done(function(data) {
 		$(".event").remove();
 		$(".container.main").append(data);
+		openAlertModal("Event was successfully deleted.");
 	});
 }
 
@@ -46,7 +58,7 @@ function loadEvents() {
 
 $(document).ready(function() {
 	$('<div id="searchModalHolder"></div>').appendTo(document.body);
-	
+
 })
 
 $(document).ajaxStop(function() {
