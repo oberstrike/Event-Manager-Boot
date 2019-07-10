@@ -24,20 +24,36 @@ function openEventModal() {
 
 function openAlertModal(param) {
 
+	var sentences = param.split('.');
+	var type = "info";
+
+	console.log(sentences.length);
+	if (sentences.length > 1) {
+		type = "danger";
+	}
+
+	sentences.forEach(function(each) {
+		if (each.length > 0) {
+
+			$.notify({
+				message : each,
+			}, {
+				type : type,
+				placement : {
+					from : "bottom",
+					align : "right"
+				}
+			})
+
+		}
+
+	});
+
 	/*
 	 * console.log("Öffne Alert Modal"); $.get("/alert?message=" +
 	 * message).done(function(data){ $("#searchModalHolder").html(data);
 	 * $("#alertModal").modal("show"); });
 	 */
-	$.notify({
-		message : param
-	}, {
-		type : "info",
-		placement : {
-			from : "bottom",
-			align : "right"
-		}
-	})
 
 }
 
@@ -46,7 +62,7 @@ function removeEvent(id) {
 	$.get("/event/remove/" + id).done(function(data) {
 		$(".event").remove();
 		$(".container.main").append(data);
-		openAlertModal("Event was successfully deleted.");
+		openAlertModal("Event was successfully deleted");
 	});
 }
 
