@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.agil.model.Event;
@@ -24,10 +26,6 @@ public class EventServiceImpl implements EventService {
 		eventRepository.save(event);
 	}
 
-	@Override
-	public List<Event> findByMembers_Name(String name) {
-		return eventRepository.findByMembers_Username(name);
-	}
 	
 	@Override
 	public void delete(Event event) {
@@ -55,5 +53,23 @@ public class EventServiceImpl implements EventService {
 		member.addEvent(event);
 		save(event);
 	}
+
+	@Override
+	public Page<Event> findByNameStartingWithIgnoreCase(String name, Pageable pageable) {
+		return eventRepository.findByNameStartingWithIgnoreCaseAndIsFinishedFalse(name, pageable);
+	}
+
+	@Override
+	public Page<Event> findByMembers_Name(String name, Pageable pageable) {
+		return eventRepository.findByMembers_UsernameAndIsFinishedFalse(name, pageable);
+	}
+
+
+
+
+
+	
+
+
 
 }

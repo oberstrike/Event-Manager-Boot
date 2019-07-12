@@ -11,6 +11,15 @@
 		<div
 			th:replace="fragments/member.html :: showMembers(members= ${members})"></div>
 	</div>
+
+
 	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$("#sForm").attr("action", "/search/member");
+		});
+	</script>
 </body>
 </html>

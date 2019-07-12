@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -12,6 +13,9 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +25,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.agil.model.Event;
 import com.agil.model.Member;
 import com.agil.services.EventService;
 import com.agil.services.MemberService;
+import com.agil.utility.Message;
+import com.agil.utility.MessageType;
 import com.agil.utility.OnEventIsActiveEvent;
 
 @Controller
@@ -44,10 +51,29 @@ public class EventController {
 	private ApplicationEventPublisher eventPublisher;
 
 	@GetMapping("/events")
-	public String getEvents(Model model, Principal principal) {
-		List<Event> events = eventService.findByMembers_Name(principal.getName());
-		Collections.sort(events);
-		model.addAttribute("events", events);
+	public String getEvents(@RequestParam(name = "name", required = false) String name,
+			@RequestParam(value = "page", required = false) String page, Model model, Principal principal) {
+
+		Page<Event> pageEvents = null;
+		int p = 0;
+
+		if (page != null)
+			p = Integer.valueOf(page) - 1;
+		if (name != null) {
+			pageEvents = eventService.findByNameStartingWithIgnoreCase(name,
+					PageRequest.of(p, 9, Sort.by("startDate").descending()));
+			model.addAttribute("name", name);
+		} else {
+			pageEvents = eventService.findByMembers_Name(principal.getName(),
+					PageRequest.of(p, 9, Sort.by("startDate").descending()));
+		}
+		
+		int pageCount = pageEvents.getTotalPages();
+		
+		model.addAttribute("pages", pageCount);
+		model.addAttribute("page", p + 1);
+		model.addAttribute("events", pageEvents.getContent());
+
 		return "/fragments/event :: showEvents";
 	}
 
@@ -64,7 +90,7 @@ public class EventController {
 		if (!NumberUtils.isDigits(id))
 			return "redirect:/home";
 		int index = Integer.valueOf(id);
-		List<Event> events = eventService.findByMembers_Name(principal.getName());
+		List<Event> events = eventService.findByMembers_Name(principal.getName(), PageRequest.of(0, 9)).getContent();
 		if (index < 0 || index >= events.size())
 			return "";
 		Collections.sort(events);
@@ -78,16 +104,13 @@ public class EventController {
 	public String addEvent(@Valid @ModelAttribute("event") Event event, BindingResult bindingResult, Model model,
 			Principal principal, RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
-			String message = "";
-			for (ObjectError error : bindingResult.getAllErrors()) {
-				message += error.getDefaultMessage() + "\n";
-			}
-			redirectAttributes.addFlashAttribute("message", message);
+			redirectAttributes.addFlashAttribute("message", getMessageOutOfResult(bindingResult));
 			return "redirect:/home";
 		}
 		Member member = memberService.findByUsername(principal.getName()).get();
 		eventService.createAndSave(event, member);
-		redirectAttributes.addFlashAttribute("message", "A new event was created successfully");
+		redirectAttributes.addFlashAttribute("message",
+				Message.MessageBuilder.create(MessageType.SUCCESS, "A new event was created successfully"));
 		return "redirect:/home";
 	}
 
@@ -108,6 +131,14 @@ public class EventController {
 		return "redirect:/events";
 	}
 
+	private Message getMessageOutOfResult(BindingResult bindingResult) {
+		String message = "";
+		for (ObjectError error : bindingResult.getAllErrors()) {
+			message += error.getCode();
+		}
+		return Message.MessageBuilder.create(MessageType.DANGER, message);
+	}
+
 	@Scheduled(fixedRate = 1000 * 60)
 	@Transactional
 	public void job() {
@@ -117,7 +148,7 @@ public class EventController {
 
 		eventService.findByStartDateBetween(currentDate, after).parallelStream()
 				.forEach(each -> eventPublisher.publishEvent(new OnEventIsActiveEvent(each)));
-		
+
 		logger.info("--- Ending Job ---");
 
 	}

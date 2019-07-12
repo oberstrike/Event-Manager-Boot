@@ -3,7 +3,13 @@
 <div th:replace="fragments/general.html :: headerdata (title='Index')"></div>
 <body>
 	<div th:replace="fragments/general.html :: header"></div>
-	<div class="container main"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-1 left d-none d-sm-block" style="margin-top: 4.75rem"></div>
+			<div class="col-10 main">Loading..</div>
+			<div class="col-1 right d-none d-sm-block" style="margin-top: 4.75rem"></div>
+		</div>
+	</div>
 
 	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
 	<div id="btn-footer">
@@ -11,10 +17,13 @@
 	</div>
 
 	<script th:inline="javascript">
+		/*<![CDATA[*/
 		$(document).ready(function() {
-			loadEvents();
-
-		})
+			var name = /*[[${name}]]*/"";
+			var page = /*[[${page}]]*/"";
+			loadEvents(name, page);
+		});
+		/*]]>*/
 	</script>
 </body>
 </html>

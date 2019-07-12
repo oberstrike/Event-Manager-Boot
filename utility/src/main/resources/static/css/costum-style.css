@@ -109,8 +109,16 @@ input:checked+.slider:before {
 	opacity: 0.6;
 }
 
-.main {
-	margin-top: 4.75rem
+#paging {
+	border-style: solid;
+	border-color: gray;
+	border-width: thin;
+	margin-right: 0.3rem;
+	padding: 0.25rem;
+}
+
+.mb-6 {
+	margin-bottom: 4.75rem;
 }
 
 

@@ -20,7 +20,7 @@
 
 <!--  th:text="${#dates.format(game.startDate, 'dd.MM.yyyy HH:mm') }" -->
 <body>
-	<div th:fragment="header">
+	<div th:fragment="header" class="mb-6">
 		<nav
 			class="navbar navbar-costum navbar-expand-md navbar-dark fixed-top bg-dark">
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -49,10 +49,10 @@
 							class="nav-link" th:onclick="'openSearchModal()' ">Search</p></li>
 
 					<li class="btn d-none d-sm-block">
-						<form class="form-inline mr-auto" method="Post" action="/search">
+						<form id="sForm" class="form-inline mr-auto" method="Post" th:action="@{/search/home}">
 							<input class="form-control" type="text" placeholder="Search"
 								aria-label="Search" id="searchForm" name="searchForm">
-							<button class="btn btn-costum-dark text-white" type="submit">Search</button>
+							<input id="sButton" class="btn btn-costum-dark text-white" type="submit" value="Search">
 						</form>
 					</li>
 				</ul>
@@ -67,6 +67,8 @@
 			</th:block>
 		</nav>
 	</div>
+	
+	
 
 
 	<div th:fragment="bootstrapcomponents">
@@ -81,18 +83,15 @@
 		<script th:inline="javascript" th:if="${message}">
 			/*<![CDATA[*/
 			$(document).ready(function() {
-				var message = /*[[${message}]]*/"";
+				var message = /*[[${message.content}]]*/"";
+				var type = /*[[${message.getTypeLowered()}]]*/"";
 				if (message.length != 0) {
-					openAlertModal(message);
+					openAlertModal(message, type);
 				}
 			});
 			/*]]>*/
 		</script>
 	</div>
-
-
-	
-
 	<div class="modal fade" id="searchModal" role="dialog"
 		aria-labelledby="Search Modal" th:fragment="searchModalContent">
 		<div class="modal-dialog modal-dialog-centered" role="document">

@@ -29,4 +29,8 @@ public interface MemberService {
 	void createVerificationToken(Member member, String token);
 
 	VerificationToken getToken(String token);
+	
+	List<Member> findByUserameStartingWithIgnoreCase(String username);
+	
+	
 }

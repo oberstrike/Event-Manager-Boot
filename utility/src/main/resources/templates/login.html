@@ -5,50 +5,57 @@
 <body>
 	<div th:replace="fragments/general.html :: header"></div>
 	<div class="container main">
-		<form th:action="@{/login}" method="POST">
-			<fieldset>
-				<legend
-					style="width: auto; margin-bottom: 5px; font-size: 16px; font-weight: bold; color: #1f497d;">Login</legend>
-				<div th:if="${param.error}">
-					<p class="text-danger">The login was not successfull. Please
-						try again.</p>
-				</div>
-				<div class="input-group form-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text"><img src="/images/user.png"
-							height="24px" width="auto" /></span>
-					</div>
-					<input type="text" class="form-control" id="username"
-						name="username" placeholder="username">
+		<div class="row">
+			<div class="col-3 d-none d-sm-block"></div>
+			<div class="col-xl-6 col-lg-4 col-md-6 col-sm-6 border">
+				<form th:action="@{/login}" method="POST">
+					<fieldset>
+						<legend
+							style="width: auto; margin-bottom: 5px; font-size: 16px; font-weight: bold; color: #1f497d;">Login</legend>
+						<div th:if="${param.error}">
+							<p class="text-danger">The login was not successfull. Please
+								try again.</p>
+						</div>
+						<div class="input-group form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><img
+									src="/images/user.png" height="24px" width="auto" /></span>
+							</div>
+							<input type="text" class="form-control" id="username"
+								name="username" placeholder="username">
 
-				</div>
-				<div class="input-group form-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text"><img src="/images/lock.png"
-							height="24px" width="auto" /></span>
-					</div>
-					<input type="password" class="form-control" id="password"
-						name="password" placeholder="password">
-				</div>
-				<div class="form-check" style="margin-bottom: 5px">
-					<input type="checkbox" class="form-check-input" id="remember-me"
-						name="remember-me"> <label class="form-check-label"
-						for="remember-me">Remember me?</label>
-				</div>
-				<div class="form-group">
-					<input type="submit" value="Login"
-						class="btn btn-round-sm float-left btn-dark"
-						style="border-radius: 20%;">
-				</div>
+						</div>
+						<div class="input-group form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><img
+									src="/images/lock.png" height="24px" width="auto" /></span>
+							</div>
+							<input type="password" class="form-control" id="password"
+								name="password" placeholder="password">
+						</div>
+						<div class="form-check" style="margin-bottom: 5px">
+							<input type="checkbox" class="form-check-input" id="remember-me"
+								name="remember-me"> <label class="form-check-label"
+								for="remember-me">Remember me?</label>
+						</div>
+						<div class="form-group">
+							<input type="submit" value="Login"
+								class="btn btn-round-sm float-left btn-dark"
+								style="border-radius: 20%;">
+						</div>
+
+
+
+					</fieldset>
+				</form>
 				<div>
 					Do you need to <a href="/register">register</a> ?
 				</div>
+			</div>
+			<div class="col-3 d-none d-sm-block"></div>
+		</div>
 
-
-			</fieldset>
-		</form>
 	</div>
-
 	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
 </body>
 </html>

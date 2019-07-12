@@ -30,6 +30,8 @@ import com.agil.model.VerificationToken;
 import com.agil.services.MemberService;
 import com.agil.services.SettingsService;
 import com.agil.utility.MemberValidator;
+import com.agil.utility.Message;
+import com.agil.utility.MessageType;
 import com.agil.utility.OnRegistrationCompleteEvent;
 
 @Controller
@@ -55,7 +57,7 @@ public class MemberController {
 			return "redirect:/home";
 
 		if (logout != null)
-			model.addAttribute("message", "you have been logged out successfull");
+			model.addAttribute("message",  Message.MessageBuilder.create(MessageType.INFO,"you have been logged out successfull"));
 		return "login";
 	}
 
@@ -70,15 +72,17 @@ public class MemberController {
 
 	@PostMapping("/register")
 	public String registration(@Valid @ModelAttribute("memberForm") MemberDTO memberForm, BindingResult bindingResult,
-			@RequestHeader(required = false) String referer, WebRequest request, Model model,
+			WebRequest request, Model model,
 			RedirectAttributes attributes) {
 		if (!settingsService.getAllowRegistration())
 			return "redirect:/login";
 		memberValidator.validate(memberForm, bindingResult);
 		String password = memberForm.getPassword();
 		String confirmPassword = memberForm.getPasswordConfirm();
+		
 		if (!password.equals(confirmPassword))
 			bindingResult.addError(new ObjectError("password", "password.notequal"));
+		
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("message", getMessageOutOfResult(bindingResult));
 			return "register";
@@ -91,7 +95,7 @@ public class MemberController {
 			e.printStackTrace();
 		}
 
-		attributes.addFlashAttribute("message", "Check your emails");
+		attributes.addFlashAttribute("message", Message.MessageBuilder.create(MessageType.INFO, "Check your emails") );
 		return "redirect:/login";
 	}
 
@@ -100,20 +104,20 @@ public class MemberController {
 			RedirectAttributes attributes) {
 		VerificationToken myToken = memberService.getToken(token);
 		if (myToken == null) {
-			attributes.addFlashAttribute("message", "Unknown token");
+			attributes.addFlashAttribute("message", Message.MessageBuilder.create(MessageType.DANGER, "Unknown token"));
 			return "redirect:/login";
 		}
 
 		Member member = myToken.getMember();
 		Calendar cal = Calendar.getInstance();
 		if ((myToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-			attributes.addFlashAttribute("message", "Your token is expired");
+			attributes.addFlashAttribute("message",  Message.MessageBuilder.create(MessageType.DANGER, "Your token is expired"));
 			return "redirect:/login";
 		}
 
 		member.setEnabled(true);
 		memberService.refresh(member);
-		attributes.addFlashAttribute("message", "Your account is activated!");
+		attributes.addFlashAttribute("message", Message.MessageBuilder.create(MessageType.INFO,"Your account is activated!"));
 
 		return "redirect:/login";
 	}
@@ -128,12 +132,12 @@ public class MemberController {
 
 	}
 
-	private String getMessageOutOfResult(BindingResult bindingResult) {
+	private Message getMessageOutOfResult(BindingResult bindingResult) {
 		String message = "";
 		for (ObjectError error : bindingResult.getAllErrors()) {
 			message += error.getCode();
 		}
-		return message;
+		return Message.MessageBuilder.create(MessageType.DANGER, message);
 	}
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,6 +22,8 @@ import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
 import com.agil.services.MemberService;
 import com.agil.utility.MemberValidator;
+import com.agil.utility.Message;
+import com.agil.utility.MessageType;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -31,8 +34,8 @@ public class AdminController {
 
 	@Autowired
 	private MemberValidator memberValidator;
-	
-	@Autowired 
+
+	@Autowired
 	private DTOConverter converter;
 
 	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No Such Member")
@@ -46,8 +49,12 @@ public class AdminController {
 	}
 
 	@GetMapping("/members")
-	public String getMembers(Model model) {
-		model.addAttribute("members", memberService.findAll());
+	public String getMembers(@RequestParam(value = "name", required = false) String name, Model model) {
+		if (name == null)
+			model.addAttribute("members", memberService.findAll());
+		else
+			model.addAttribute("members", memberService.findByUserameStartingWithIgnoreCase(name));
+
 		return "members";
 	}
 
@@ -93,16 +100,17 @@ public class AdminController {
 		}
 
 		memberService.createAndRegister(memberForm);
-		redirectAttributes.addFlashAttribute("message", "A new member was created successfully");
+		redirectAttributes.addFlashAttribute("message",
+				Message.MessageBuilder.create(MessageType.SUCCESS, "A new member was created successfully"));
 		return "redirect:/members";
 	}
 
-	private String getMessageOutOfResult(BindingResult bindingResult) {
+	private Message getMessageOutOfResult(BindingResult bindingResult) {
 		String message = "";
 		for (ObjectError error : bindingResult.getAllErrors()) {
 			message += error.getCode();
 		}
-		return message;
+		return Message.MessageBuilder.create(MessageType.DANGER, message);
 	}
 
 }

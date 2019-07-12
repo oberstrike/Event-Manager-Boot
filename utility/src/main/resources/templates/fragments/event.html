@@ -33,5 +33,21 @@
 				</div>
 			</th:block>
 		</div>
+		<div class="row">
+			<div class="col">
+				<span th:each="i : ${#numbers.sequence(1, pages)}"> 
+					<span th:unless="${name}"> 
+						<a th:if="${i} != ${page}" id="paging"
+							th:href="@{'/home?page=' + ${i}}" th:text="${i}"></a>
+					</span>
+					<span th:if="${name}">
+						<a th:if="${i} != ${page}" id="paging"
+							th:href="@{'/home?name='+ ${name} + '&page=' + ${i}}" th:text="${i}"></a>
+					</span>
+					
+				</span>
+			</div>
+
+		</div>
 	</th:block>
 </th:block>

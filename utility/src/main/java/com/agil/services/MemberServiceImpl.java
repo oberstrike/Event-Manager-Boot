@@ -24,7 +24,7 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	public BCryptPasswordEncoder encoder;
 	@Autowired
-	private MemberRepository userRepo;
+	private MemberRepository memberRepository;
 	@Autowired
 	private VerificationTokenRepository tokenRepository;
 	@Autowired
@@ -32,28 +32,28 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Optional<Member> findById(long id) {
-		return userRepo.findById(id);
+		return memberRepository.findById(id);
 	}
 
 	@Override
 	public void save(@Valid Member memberForm) {
 		memberForm.setPassword(encoder.encode(memberForm.getPassword()));
-		userRepo.save(memberForm);
+		memberRepository.save(memberForm);
 	}
 
 	@Override
 	public Optional<Member> findByUsername(String username) {
-		return userRepo.findByUsername(username);
+		return memberRepository.findByUsername(username);
 	}
 
 	@Override
 	public Optional<Member> findByEmail(String email) {
-		return userRepo.findByEmail(email);
+		return memberRepository.findByEmail(email);
 	}
 
 	@Override
 	public List<Member> findAll() {
-		return StreamUtils.createStreamFromIterator(userRepo.findAll().iterator()).collect(Collectors.toList());
+		return StreamUtils.createStreamFromIterator(memberRepository.findAll().iterator()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void refresh(Member member) {
-		userRepo.save(member);
+		memberRepository.save(member);
 	}
 
 	@Override
@@ -92,5 +92,12 @@ public class MemberServiceImpl implements MemberService {
 	public VerificationToken getToken(String token) {
 		return tokenRepository.findByToken(token);
 	}
+
+	@Override
+	public List<Member> findByUserameStartingWithIgnoreCase(String username) {
+		return memberRepository.findByUsernameStartingWithIgnoreCase(username);
+	}
+	
+	
 
 }

@@ -6,13 +6,14 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.agil.model.Event;
 import com.agil.model.Member;
 
 public interface EventService {
 	public void save(Event event);
-
-	public List<Event> findByMembers_Name(String name);
 
 	void delete(Event event);
 
@@ -23,5 +24,10 @@ public interface EventService {
 	public List<Event> findByStartDateBetween(Date currentDate, Date after);
 
 	public void createAndSave(@Valid Event event, Member member);
+
+	Page<Event> findByMembers_Name(String name, Pageable pageable);
+
+	Page<Event> findByNameStartingWithIgnoreCase(String name, Pageable pageable);
+
 
 }

@@ -22,15 +22,9 @@ function openEventModal() {
 	})
 }
 
-function openAlertModal(param) {
+function openAlertModal(content, type) {
 
-	var sentences = param.split('.');
-	var type = "info";
-
-	console.log(sentences.length);
-	if (sentences.length > 1) {
-		type = "danger";
-	}
+	var sentences = content.split('.');
 
 	sentences.forEach(function(each) {
 		if (each.length > 0) {
@@ -61,20 +55,28 @@ function removeEvent(id) {
 	console.log("remove: " + id);
 	$.get("/event/remove/" + id).done(function(data) {
 		$(".event").remove();
-		$(".container.main").append(data);
-		openAlertModal("Event was successfully deleted");
+		$(".main").html(data);
+		openAlertModal("Event was successfully deleted", "success");
 	});
 }
 
-function loadEvents() {
-	$.get("/events").done(function(data) {
-		$(".container.main").append(data);
+function loadEvents(name, page) {
+	var v = "/events?";
+	if (name != undefined) {
+		v += "name=" + name + "&";
+	}
+	if (page != undefined) {
+		v += "page=" + page;
+	}
+
+	$.get(v).done(function(data) {
+		$(".main").html(data);
 	});
+
 }
 
 $(document).ready(function() {
 	$('<div id="searchModalHolder"></div>').appendTo(document.body);
-
 })
 
 $(document).ajaxStop(function() {
