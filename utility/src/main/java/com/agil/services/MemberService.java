@@ -31,6 +31,8 @@ public interface MemberService {
 	VerificationToken getToken(String token);
 	
 	List<Member> findByUserameStartingWithIgnoreCase(String username);
+
+	void delete(Member findById);
 	
 	
 }

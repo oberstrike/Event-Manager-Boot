@@ -14,6 +14,8 @@
 	crossorigin="anonymous">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	th:href="@{/webjars/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.css}">
 <title th:text="${title}">Member</title>
 <link href="/css/costum-style.css" rel="stylesheet">
 </head>
@@ -49,10 +51,12 @@
 							class="nav-link" th:onclick="'openSearchModal()' ">Search</p></li>
 
 					<li class="btn d-none d-sm-block">
-						<form id="sForm" class="form-inline mr-auto" method="Post" th:action="@{/search/home}">
+						<form id="sForm" class="form-inline mr-auto" method="Post"
+							th:action="@{/search/home}">
 							<input class="form-control" type="text" placeholder="Search"
-								aria-label="Search" id="searchForm" name="searchForm">
-							<input id="sButton" class="btn btn-costum-dark text-white" type="submit" value="Search">
+								aria-label="Search" id="searchForm" name="searchForm"> <input
+								id="sButton" class="btn btn-costum-dark text-white"
+								type="submit" value="Search">
 						</form>
 					</li>
 				</ul>
@@ -67,8 +71,8 @@
 			</th:block>
 		</nav>
 	</div>
-	
-	
+
+
 
 
 	<div th:fragment="bootstrapcomponents">
@@ -76,9 +80,13 @@
 		<script th:src="@{/webjars/popper.js/1.14.7/popper.min.js}"></script>
 		<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
 		<script th:src="@{/webjars/momentjs/2.24.0/moment.js}"></script>
-		<script th:src="@{/webjars/bootstrap-notify/3.1.3-1/bootstrap-notify.js}"></script>
+		<script
+			th:src="@{/webjars/bootstrap-notify/3.1.3-1/bootstrap-notify.js}"></script>
+
+		<script
+			th:src="@{/webjars/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.js}"></script>
 		<script src="/js/scripts.js"></script>
-		
+
 
 		<script th:inline="javascript" th:if="${message}">
 			/*<![CDATA[*/
@@ -136,17 +144,34 @@
 				<form action="/event/add" method="Post" th:object="${event}">
 					<div class="modal-body">
 						<div class="container">
-							<div class="row">
+							<div class="row pb-2">
 								<div class="col-md-3" style="padding-bottom: 0.5rem">Name:</div>
 								<div class="col-md-9">
 									<input class="form-control" type="text" name="name" id="name">
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-md-3">Datum</div>
+							<div class="row pb-2">
+								<div class="col-md-3">Date:</div>
 								<div class="col-md-9">
-									<input class="form-control" type="text" name="startDate"
-										id="startDate">
+									<div class="form-group">
+										<div class="input-group date" id="datetimepicker" name="datetimepicker"
+											data-target-input="nearest">
+											<input type="text" class="form-control datetimepicker-input"
+												data-target="#datetimepicker" id="startDate"  name="startDate"/>
+											<div class="input-group-append"
+												data-target="#datetimepicker" data-toggle="datetimepicker">
+												<div class="input-group-text">OPEN PICKER</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row pb-2">
+								<div class="col-md-3">Minutes for remember:</div>
+								<div class="col-md-9">
+									<input class="form-control" type="text"
+										name="minutesToRemember" id="minutesToRemember"
+										placeholder="1 to 60 minutes">
 								</div>
 							</div>
 						</div>

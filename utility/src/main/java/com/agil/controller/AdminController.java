@@ -1,8 +1,11 @@
 package com.agil.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -17,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.agil.dto.DTOConverter;
+import com.agil.converter.DTOConverter;
 import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
 import com.agil.services.MemberService;
@@ -36,6 +39,7 @@ public class AdminController {
 	private MemberValidator memberValidator;
 
 	@Autowired
+	@Qualifier("memberConverter")
 	private DTOConverter converter;
 
 	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No Such Member")
@@ -59,13 +63,13 @@ public class AdminController {
 	}
 
 	@GetMapping("/member/{id}")
-	public String getMember(@PathVariable("id") String id, Model model) {
+	public String getMember(@PathVariable("id") String id, Model model, MemberDTO memberDTO) {
 		long lId = Long.parseLong(id);
 		if (lId != 0) {
 			Member member = memberService.findById(lId).orElseThrow(MemberNotFoundException::new);
-			model.addAttribute("member", converter.convertToMemberDTO(member));
+			model.addAttribute("member", (MemberDTO) converter.convert(member));
 		} else {
-			model.addAttribute("member", new MemberDTO());
+			model.addAttribute("member", memberDTO);
 		}
 
 		return "/fragments/member :: memberModalContent ";
@@ -76,7 +80,7 @@ public class AdminController {
 	public String updateMember(@Valid @ModelAttribute("member") MemberDTO memberForm, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
 		memberForm.setAgb(true);
-		memberValidator.validate(memberForm, bindingResult);
+
 		if (bindingResult.hasErrors()) {
 			redirectAttributes.addFlashAttribute("message", getMessageOutOfResult(bindingResult));
 			return "redirect:/members";
@@ -102,6 +106,18 @@ public class AdminController {
 		memberService.createAndRegister(memberForm);
 		redirectAttributes.addFlashAttribute("message",
 				Message.MessageBuilder.create(MessageType.SUCCESS, "A new member was created successfully"));
+		return "redirect:/members";
+	}
+	
+	@GetMapping("/member/remove/{id}")
+	public String removeMember(@PathVariable("id") String id, Model model, RedirectAttributes redirectAttributes) {
+		Optional<Member> optional = memberService.findById(Long.valueOf(id));
+		if(!optional.isPresent())
+		{
+			redirectAttributes.addAttribute("message", Message.MessageBuilder.create(MessageType.DANGER, "No such member found"));
+			return "redirect:/members";
+		}
+		memberService.delete(optional.get());
 		return "redirect:/members";
 	}
 

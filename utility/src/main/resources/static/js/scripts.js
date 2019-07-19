@@ -1,3 +1,5 @@
+
+
 function openMemberModal(id) {
 	console.log("Öffne Member " + id);
 	$.get("/member/" + id).done(function(data) {
@@ -10,16 +12,48 @@ function openSearchModal() {
 	$.get("/search").done(function(data) {
 		$("#searchModalHolder").html(data);
 		$("#searchModal").modal("show");
+	
 	})
 }
 
+function showEventSettings(id) {
+	$.get("/event/settings/" + id).done(function(data) {
+
+		$("#searchModalHolder").html(data);
+		$("#eventSettingsModal").modal("show");
+		setTimeout(
+				function() {
+					console.log("Date");
+					$("#datetimepicker")
+							.datetimepicker(
+									'format',
+									"DD.MM.YYYY HH:mm");
+				}, 1000);
+	});
+}
+
 function openEventModal() {
-	console.log("Öffne Event Modal");
 	$.get("/event").done(function(data) {
 		$("#searchModalHolder").html(data);
 		$("#eventModal").modal("show");
+		setTimeout(
+				function() {
+					console.log("Date");
+					$("#datetimepicker")
+							.datetimepicker(
+									'format',
+									"DD.MM.YYYY HH:mm");
+				}, 1000);
+	});
+}
 
-	})
+function removeMember(id) {
+	$.get("/member/remove/" + id).done(function(data) {
+		$("#memberModal").modal("hide");
+		$("body").html(data);
+		openAlertModal("Successfull deleted", "success");
+
+	});
 }
 
 function openAlertModal(content, type) {
@@ -75,8 +109,43 @@ function loadEvents(name, page) {
 
 }
 
+function* counter(index){
+	while(true){
+		yield index++;
+	}
+}
+
+var iterator = counter(0);
+
+function eventSettingsAddMember() {
+	var value = $('.username').val();
+	var i = iterator.next().value;
+
+	var x = $("<div></div>")
+			.addClass("row")
+			.addClass("name-" + i)
+			.addClass("pb-2")
+			.append(
+					($("<div></div>").addClass("col-9").append(value))
+							.append($("<input>").attr("name","names[]").attr("type", "hidden").attr(
+									"value", value)))
+			.append(
+					($("<div></div>").addClass("col-3")
+							.append($(
+									'<span class="float-right" aria-hidden="true">&times;</span>')
+									.attr("onclick", "eventSettingsRemoveMember('" + i + "')"))));
+
+	$(".m-b").append(x);
+
+}
+
+function eventSettingsRemoveMember(id){
+	$(".name-" + id).remove();
+}
+
 $(document).ready(function() {
 	$('<div id="searchModalHolder"></div>').appendTo(document.body);
+
 })
 
 $(document).ajaxStop(function() {

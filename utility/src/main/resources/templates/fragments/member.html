@@ -60,6 +60,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
+				<div th:if="${!member.isAdmin()}" id="button" data-role="button" class="btn btn-secondary" th:onclick="'removeMember(\'' + ${member.id} + '\');'">Delete</div>
 					<input type="submit" value="Save Changes"
 						class="btn btn-round-sm float-left btn-danger">
 					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>

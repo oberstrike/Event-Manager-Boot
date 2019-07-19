@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,7 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 public class Event implements Comparable<Event> {
 	public Event() {
-		this.isFinished = false;
+		this.finished = false;
 	}
 
 	@Id
@@ -32,11 +33,18 @@ public class Event implements Comparable<Event> {
 	@ManyToMany(mappedBy = "events")
 	private Set<Member> members = new HashSet<Member>();
 
-	private boolean isFinished;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Member creator;
 
-	@DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
+	private boolean finished;
+	
+	private boolean remembered;
+
 	@NotNull(message = "{event.date.badformat}")
+	@DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
 	private Date startDate;
+	
+	private Date rememberDate;
 
 	public String getName() {
 		return name;
@@ -61,11 +69,11 @@ public class Event implements Comparable<Event> {
 	}
 
 	public boolean isFinished() {
-		return isFinished;
+		return finished;
 	}
 
 	public void setFinished(boolean isFinished) {
-		this.isFinished = isFinished;
+		this.finished = isFinished;
 	}
 
 	public long getId() {
@@ -92,6 +100,41 @@ public class Event implements Comparable<Event> {
 
 	public void setMembers(Set<Member> members) {
 		this.members = members;
+	}
+
+
+	public boolean isRemembered() {
+		return remembered;
+	}
+
+	public void setRemembered(boolean remembered) {
+		this.remembered = remembered;
+	}
+
+	public Date getRememberDate() {
+		return rememberDate;
+	}
+
+	public void setRememberDate(Date rememberDate) {
+		this.rememberDate = rememberDate;
+	}
+
+	/**
+	 * @return the creator
+	 */
+	public Member getCreator() {
+		return creator;
+	}
+
+	/**
+	 * @param creator the creator to set
+	 */
+	public void setCreator(Member creator) {
+		this.creator = creator;
+	}
+
+	public boolean isCreator(String name2) {
+		return this.creator.getUsername().equals(name2);
 	}
 
 }

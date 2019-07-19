@@ -2,12 +2,14 @@ package com.agil;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 
 import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +22,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.agil.config.MailConfig;
+import com.agil.converter.DTOConverter;
+import com.agil.converter.EventConverter;
+import com.agil.converter.MemberConverter;
 import com.agil.dto.EventDTO;
 import com.agil.dto.MemberDTO;
 import com.agil.model.Event;
@@ -49,20 +54,20 @@ public class UtilityApplication extends SpringBootServletInitializer {
 		return (args) -> {
 			Member user = new Member(new HashSet<>(Arrays.asList(MemberRole.ROLE_USER, MemberRole.ROLE_ADMIN)),
 					"oberstrike", encoder.encode("mewtu123"), "markus.juergens@gmx.de");
-
-			for (int i = 0; i < 10; i++) {
-				Event event = new Event("VWL-Klausur " + new Random().nextInt(100),
-						new SimpleDateFormat("yyyy-MM-dd HH:mm")
-								.parse("2019-07-07 18:5" + 1 * new Random().nextInt(10)));
-				eventRepository.save(event);
-				user.addEvent(event);
-			}
-
-			user.getEvents().size();
-
 			user.setEnabled(true);
 			userRepository.save(user);
+			for (int i = 0; i < 10; i++) {
+				Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+						.parse("2019-07-14 20:5" + 1 * new Random().nextInt(10));
+				Event event = new Event("Random " + i, date);
+				event.setRemembered(true);
+				event.setRememberDate(new Date(date.getTime() - 1000 * 60));
+				event.setCreator(user);
+				eventRepository.save(event);
+				user.addEvent(event);
 
+			}
+			userRepository.save(user);
 			user = new Member(new HashSet<>(Arrays.asList(MemberRole.ROLE_USER)), "markus", encoder.encode("mewtu123"),
 					"oberstrike@gmx.de");
 			user.setEnabled(true);
@@ -94,24 +99,15 @@ public class UtilityApplication extends SpringBootServletInitializer {
 		return mailSender;
 	}
 
-	@Bean
-	public Member getMember() {
-		return new Member();
+
+	@Bean(name = "eventConverter")
+	public DTOConverter getEventConverter() {
+		return new EventConverter();
 	}
 
-	@Bean
-	public MemberDTO getMemberDTO() {
-		return new MemberDTO();
-	}
-
-	@Bean
-	public Event getEvent() {
-		return new Event();
-	}
-
-	@Bean
-	public EventDTO getEventDTO() {
-		return new EventDTO();
+	@Bean(name = "memberConverter")
+	public DTOConverter getMemberConverter() {
+		return new MemberConverter();
 	}
 
 }

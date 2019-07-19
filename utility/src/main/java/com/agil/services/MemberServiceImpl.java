@@ -7,11 +7,12 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.util.StreamUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.agil.dto.DTOConverter;
+import com.agil.converter.DTOConverter;
 import com.agil.dto.MemberDTO;
 import com.agil.model.Member;
 import com.agil.model.VerificationToken;
@@ -28,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private VerificationTokenRepository tokenRepository;
 	@Autowired
+	@Qualifier("memberConverter")
 	private DTOConverter converter;
 
 	@Override
@@ -58,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Member createAndRegister(@Valid MemberDTO memberForm) {
-		Member member = converter.convertToMember(memberForm);
+		Member member = (Member) converter.convert(memberForm);
 		save(member);
 		return member;
 	}
@@ -96,6 +98,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<Member> findByUserameStartingWithIgnoreCase(String username) {
 		return memberRepository.findByUsernameStartingWithIgnoreCase(username);
+	}
+
+	@Override
+	public void delete(Member entity) {
+		memberRepository.delete(entity);
 	}
 	
 	
