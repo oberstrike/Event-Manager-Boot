@@ -12,7 +12,7 @@
 		<div class="card-header">
 			<div class="col">
 				<span th:text="${event.name}"></span> <span class="float-right">
-					<input th:if="${event.creator == username}" type="image"
+					<input th:if="${event.creatorName == username}" type="image"
 					src="/images/settings.png"
 					th:onclick="'showEventSettings(\'' + ${event.id} + '\');'">
 				</span>
@@ -22,7 +22,7 @@
 		<div class="card-body">
 			<p class="card-text"
 				th:text="${#dates.format(event.startDate, 'dd.MM.yyyy HH:mm') }"></p>
-			<a href="#" class="btn btn-primary" th:text="${event.creator}">Go
+			<a href="#" class="btn btn-primary" th:text="${event.creatorName}">Go
 				To Event</a>
 		</div>
 	</div>

@@ -61,6 +61,7 @@ public class MemberController {
 		return "login";
 	}
 
+	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String getRegisterPage(Model model) {
 		if (!settingsService.getAllowRegistration())

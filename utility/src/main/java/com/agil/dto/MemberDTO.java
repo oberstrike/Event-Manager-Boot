@@ -5,13 +5,16 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class MemberDTO {
 
-	public MemberDTO() {
 
-	}
-
-	
 	private long id;
 
 	@NotEmpty(message = "{username.notempty}")
@@ -24,73 +27,13 @@ public class MemberDTO {
 	@Email
 	@NotEmpty(message = "{email.notempty}")
 	private String email;
-	
+
 	private boolean isAdmin;
-	
+
 	private boolean enabled;
-	
-	public boolean isAdmin() {
-		return this.isAdmin;
-	}
-	
-	public void setIsAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
 
 	public boolean isAgb() {
 		return agb;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
-	}
-
-	public void setAgb(boolean agb) {
-		this.agb = agb;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	@Transient

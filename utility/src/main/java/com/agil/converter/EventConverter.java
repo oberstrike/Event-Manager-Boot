@@ -14,7 +14,7 @@ public class EventConverter extends DTOConverter {
 		Object convertedObject = super.convert(object);
 		if (convertedObject.getClass().equals(getDtoClass())) {
 			Event event = (Event) object;
-			((EventDTO) convertedObject).setCreator(event.getCreator().getUsername());
+			((EventDTO) convertedObject).setCreatorName(event.getCreator().getUsername());
 		}
 
 		return convertedObject;

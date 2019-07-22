@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -61,9 +60,8 @@ public abstract class DTOConverter {
 			e.printStackTrace();
 		}
 	}
-
-	public Object convert(Object object) {
-
+	
+	private Object convertObject(Object object) {
 		Object newObject = null;
 		try {
 			if (object.getClass().equals(getEntityClass()))
@@ -93,6 +91,10 @@ public abstract class DTOConverter {
 		}
 		return newObject;
 
+	}
+
+	public Object convert(Object object) {
+		return this.convertObject(object);
 	}
 
 	public Class<?> getEntityClass() {

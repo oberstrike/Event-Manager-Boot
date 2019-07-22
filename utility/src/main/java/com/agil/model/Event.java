@@ -16,7 +16,12 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class Event implements Comparable<Event> {
 	public Event() {
 		this.finished = false;
@@ -46,9 +51,6 @@ public class Event implements Comparable<Event> {
 	
 	private Date rememberDate;
 
-	public String getName() {
-		return name;
-	}
 
 	public Event(String name, Date startDate) {
 		this();
@@ -56,33 +58,6 @@ public class Event implements Comparable<Event> {
 		this.startDate = startDate;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public boolean isFinished() {
-		return finished;
-	}
-
-	public void setFinished(boolean isFinished) {
-		this.finished = isFinished;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	@Override
 	public int compareTo(Event o) {
@@ -94,47 +69,68 @@ public class Event implements Comparable<Event> {
 
 	}
 
-	public Set<Member> getMembers() {
-		return members;
-	}
-
-	public void setMembers(Set<Member> members) {
-		this.members = members;
-	}
-
-
-	public boolean isRemembered() {
-		return remembered;
-	}
-
-	public void setRemembered(boolean remembered) {
-		this.remembered = remembered;
-	}
-
-	public Date getRememberDate() {
-		return rememberDate;
-	}
-
-	public void setRememberDate(Date rememberDate) {
-		this.rememberDate = rememberDate;
-	}
-
-	/**
-	 * @return the creator
-	 */
-	public Member getCreator() {
-		return creator;
-	}
-
-	/**
-	 * @param creator the creator to set
-	 */
-	public void setCreator(Member creator) {
-		this.creator = creator;
-	}
-
 	public boolean isCreator(String name2) {
 		return this.creator.getUsername().equals(name2);
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
+		result = prime * result + (finished ? 1231 : 1237);
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((members == null) ? 0 : members.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((rememberDate == null) ? 0 : rememberDate.hashCode());
+		result = prime * result + (remembered ? 1231 : 1237);
+		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Event other = (Event) obj;
+		if (creator == null) {
+			if (other.creator != null)
+				return false;
+		} else if (!creator.equals(other.creator))
+			return false;
+		if (finished != other.finished)
+			return false;
+		if (id != other.id)
+			return false;
+		if (members == null) {
+			if (other.members != null)
+				return false;
+		} else if (!members.equals(other.members))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (rememberDate == null) {
+			if (other.rememberDate != null)
+				return false;
+		} else if (!rememberDate.equals(other.rememberDate))
+			return false;
+		if (remembered != other.remembered)
+			return false;
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (!startDate.equals(other.startDate))
+			return false;
+		return true;
 	}
 
 }

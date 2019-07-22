@@ -1,7 +1,5 @@
 package com.agil.config;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -23,25 +23,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 
 	@Bean
+	public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
+		return new MySimpleUrlAuthenticationSuccessHandler();
+	}
+
+	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/registration").permitAll()
-				.antMatchers("/webjars/**").permitAll()
-				.antMatchers("/registrationConfirm").permitAll()
-				.antMatchers("/images/**").permitAll()
-				.antMatchers("/js/**").permitAll()
-				.antMatchers("/css/**").permitAll()
-				.antMatchers("/dataprotection").permitAll()
-				.antMatchers("/register").permitAll()				
-				.antMatchers("/search/**").permitAll()
-				.antMatchers("/alert/**").permitAll()
-				.antMatchers("/impressum").permitAll().anyRequest().authenticated().and().formLogin()
-				.loginPage("/login").permitAll().and().logout().logoutSuccessUrl("/login").permitAll().and()
-				.exceptionHandling().accessDeniedPage("/403").and().rememberMe().key("uSecret").and().logout().and().csrf().disable();
+		http.authorizeRequests().antMatchers("/registration").permitAll().antMatchers("/webjars/**").permitAll()
+				.antMatchers("/registrationConfirm").permitAll().antMatchers("/images/**").permitAll()
+				.antMatchers("/js/**").permitAll().antMatchers("/css/**").permitAll().antMatchers("/dataprotection")
+				.permitAll().antMatchers("/register").permitAll().antMatchers("/search/**").permitAll()
+				.antMatchers("/alert/**").permitAll().antMatchers("/impressum").permitAll().anyRequest().authenticated()
+				.and().formLogin().loginPage("/login").successHandler(myAuthenticationSuccessHandler()).permitAll()
+				.and().logout().logoutSuccessUrl("/login").logoutSuccessHandler(logoutSuccessHandler()).permitAll().and().exceptionHandling()
+				.accessDeniedPage("/403").and().rememberMe().key("uSecret").and().logout().and().csrf().disable();
+	}
+
+	private LogoutSuccessHandler logoutSuccessHandler() {
+		return new MyLogoutSuccessHandler();
 	}
 
 	@Bean
@@ -53,7 +57,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
-
-	
 
 }

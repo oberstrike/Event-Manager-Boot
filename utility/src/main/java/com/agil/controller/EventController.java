@@ -77,11 +77,7 @@ public class EventController {
 
 		int pageCount = pageEvents.getTotalPages();
 
-		List<EventDTO> pages = pageEvents.getContent().stream().map(event -> {
-			EventDTO eventDTO = eventService.convert(event);
-			eventDTO.setCreator(event.getCreator().getUsername());
-			return eventDTO;
-		}).collect(Collectors.toList());
+		List<EventDTO> pages = pageEvents.getContent().stream().map(eventService::convert).collect(Collectors.toList());
 
 		model.addAttribute("pages", pageCount);
 		model.addAttribute("page", p + 1);

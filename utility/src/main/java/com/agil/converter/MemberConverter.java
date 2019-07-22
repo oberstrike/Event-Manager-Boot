@@ -14,7 +14,7 @@ public class MemberConverter extends DTOConverter {
 		Object convertedObject = super.convert(object);
 		if (convertedObject.getClass().equals(getDtoClass())) {
 			Member member = (Member) object;
-			((MemberDTO) convertedObject).setIsAdmin(member.isAdmin());
+			((MemberDTO) convertedObject).setAdmin(member.isAdmin());
 		}
 		
 		return convertedObject;

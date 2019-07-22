@@ -27,6 +27,7 @@ import com.agil.converter.EventConverter;
 import com.agil.converter.MemberConverter;
 import com.agil.dto.EventDTO;
 import com.agil.dto.MemberDTO;
+import com.agil.model.ActiveUserStore;
 import com.agil.model.Event;
 import com.agil.model.Member;
 import com.agil.repos.EventRepository;
@@ -110,4 +111,9 @@ public class UtilityApplication extends SpringBootServletInitializer {
 		return new MemberConverter();
 	}
 
+	@Bean
+	public ActiveUserStore getActiveUserStore() {
+		return new ActiveUserStore();
+	}
+	
 }

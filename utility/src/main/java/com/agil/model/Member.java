@@ -23,12 +23,17 @@ import javax.validation.constraints.Size;
 
 import com.agil.utility.MemberRole;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class Member {
 
 	public Member() {
 		this.enabled = false;
-}
+	}
 
 	public Member(Set<MemberRole> roles,
 			@NotEmpty(message = "{username.notempty}") @Size(min = 6, max = 32, message = "{username.badformat}") String username,
@@ -40,7 +45,6 @@ public class Member {
 		this.password = password;
 		this.email = email;
 	}
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,71 +79,14 @@ public class Member {
 		this.id = id;
 	}
 
-	public Set<MemberRole> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<MemberRole> roles) {
-		this.roles = roles;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
-	public boolean isAgb() {
-		return agb;
-	}
-
-	public void setAgb(boolean agb) {
-		this.agb = agb;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
 	public boolean isAdmin() {
 		return this.roles == null ? false : roles.contains(MemberRole.ROLE_ADMIN);
-	}
-
-	public Set<Event> getEvents() {
-		return events;
 	}
 
 	public List<Event> getSortedEvents() {
 		List<Event> list = new ArrayList<Event>(events);
 		return list;
 
-	}
-
-	public void setEvents(Set<Event> events) {
-		this.events = events;
 	}
 
 	public void addEvent(Event event) {
@@ -150,5 +97,5 @@ public class Member {
 	public void removeEvent(Event event) {
 		events.remove(event);
 	}
-	
+
 }

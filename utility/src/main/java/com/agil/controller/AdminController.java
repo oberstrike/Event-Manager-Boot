@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.agil.converter.DTOConverter;
 import com.agil.dto.MemberDTO;
+import com.agil.model.ActiveUserStore;
 import com.agil.model.Member;
 import com.agil.services.MemberService;
 import com.agil.utility.MemberValidator;
@@ -38,6 +39,9 @@ public class AdminController {
 	@Autowired
 	private MemberValidator memberValidator;
 
+	@Autowired
+	private ActiveUserStore activeUserStore;
+	
 	@Autowired
 	@Qualifier("memberConverter")
 	private DTOConverter converter;
@@ -120,7 +124,14 @@ public class AdminController {
 		memberService.delete(optional.get());
 		return "redirect:/members";
 	}
-
+	
+	@GetMapping("/users")
+	public String getLoggedInUsers(Model model) {
+		model.addAttribute("users", activeUserStore.getMembers());
+		
+		return "user";
+	}
+	
 	private Message getMessageOutOfResult(BindingResult bindingResult) {
 		String message = "";
 		for (ObjectError error : bindingResult.getAllErrors()) {

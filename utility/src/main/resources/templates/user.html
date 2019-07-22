@@ -1,0 +1,17 @@
+
+<div
+	th:replace="fragments/general.html :: headerdata (title='TEMPLATE-NEEDS-CHANGE')"></div>
+<body>
+	<div th:replace="fragments/general.html :: header"></div>
+	<div class="container main">
+		<div class="row">
+			<h2>Currently logged in users</h2>
+			<div th:each="user : ${users}">
+				<p th:text="${user}">user</p>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/general.html :: bootstrapcomponents"></div>
+</body>
+</html>
